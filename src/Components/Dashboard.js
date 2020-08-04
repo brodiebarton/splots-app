@@ -17,10 +17,10 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+// import NotificationsIcon from '@material-ui/icons/Notifications';
 import AddIcon from '@material-ui/icons/Add'
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
+import BarChart from './BarChart';
 
 function Copyright() {
   return (
@@ -175,7 +175,7 @@ export default function Dashboard() {
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
               <Paper>
-                <Chart />
+                <BarChart />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
