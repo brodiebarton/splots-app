@@ -14,7 +14,6 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 // import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -23,8 +22,7 @@ import { mainListItems, secondaryListItems } from './listItems';
 import BarChart from './BarChart';
 import ScatterPlot from './ScatterPlot';
 import { Router, Link as ReachLink } from '@reach/router';
-
-
+import Dashboard from './Dashboard';
 
 const drawerWidth = 240;
 
@@ -107,32 +105,93 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+function Copyright() {
+	return (
+	  <Typography variant="body2" color="textSecondary" align="center">
+		{'Copyright © '}
+		  Splots App
+		{new Date().getFullYear()}
+		{'.'}
+	  </Typography>
+	);
+  }
+
+export default function Home() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  // handlers
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const handleAddButtonClick = () => {
+	  console.log("ADD BUTTON CLICKED");
+  }
+
+//   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-		<>
-		{/* <Container maxWidth="lg" className={classes.container}> */}
-			<Grid container spacing={3} justify="space-evenly">
-				<Grid item xs={6}>
-					<BarChart />
-				</Grid>
-				<Grid item xs={6}>
-					<ScatterPlot />	
-				</Grid>
-				<Grid item xs={6}>
-					<BarChart />
-				</Grid>
-				<Grid item xs={6}>
-					<ScatterPlot />	
-				</Grid>
-				<Grid item xs={6}>
-					<BarChart />
-				</Grid>
-				<Grid item xs={6}>
-					<ScatterPlot />	
-				</Grid>
-			</Grid>
-		</>
+	  <>
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Splots Charts
+          </Typography>
+          <IconButton color="inherit">
+            {/* <Badge badgeContent={0} color="secondary"> */}
+              <AddIcon onClick={handleAddButtonClick}/>
+            {/* </Badge> */}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        }}
+        open={open}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+
+		{/* Main Menu Items */}
+        <Divider />
+        <List>{mainListItems}</List>
+
+		{/* Secondary Menu Items */}
+        <Divider />
+        {/* <List>{secondaryListItems}</List> */}
+		
+      </Drawer>
+	  <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+		<Router>
+			<Dashboard path="dashboard" />
+			<BarChart path="bar-chart" />
+			<ScatterPlot path="scatter-plot" />
+		</Router>
+      </main>
+    </div>
+	</>
   );
 }
