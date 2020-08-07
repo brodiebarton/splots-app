@@ -19,10 +19,10 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 // import NotificationsIcon from '@material-ui/icons/Notifications';
 import AddIcon from '@material-ui/icons/Add'
 import { mainListItems, secondaryListItems } from './listItems';
-import BarChart from './BarChart';
-import ScatterPlot from './ScatterPlot';
-import { Router, Link as ReachLink } from '@reach/router';
+import { Router } from '@reach/router';
 import Dashboard from './Dashboard';
+import BarChart from './BarChart';
+import ScatterPlot from './ScatterPlot'
 
 const drawerWidth = 240;
 
@@ -185,11 +185,11 @@ export default function Home() {
       </Drawer>
 	  <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-		<Router>
-			<Dashboard path="dashboard" />
-			<BarChart path="bar-chart" />
-			<ScatterPlot path="scatter-plot" />
-		</Router>
+			<Router>
+				<Dashboard path="dashboard" />
+				<BarChart path="bar-chart" />
+				<ScatterPlot path="scatter-plot" />
+			</Router>
       </main>
     </div>
 	</>

@@ -123,15 +123,6 @@ export default function Dashboard() {
 				<Grid item xs={6}>
 					<BarChart />
 				</Grid>
-				<Grid item xs={6}>
-					<ScatterPlot />	
-				</Grid>
-				<Grid item xs={6}>
-					<BarChart />
-				</Grid>
-				<Grid item xs={6}>
-					<ScatterPlot />	
-				</Grid>
 			</Grid>
 		</>
   );

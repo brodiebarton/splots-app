@@ -1,7 +1,9 @@
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { Container, Grid, Paper } from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 export default function ScatterPlot() {
