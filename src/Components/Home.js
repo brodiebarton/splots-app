@@ -155,7 +155,7 @@ export default function Home() {
           </Typography>
           <IconButton color="inherit">
             {/* <Badge badgeContent={0} color="secondary"> */}
-              <AddIcon onClick={handleAddButtonClick}/>
+              <AddIcon onClick={ handleAddButtonClick }/>
             {/* </Badge> */}
           </IconButton>
         </Toolbar>
@@ -169,7 +169,7 @@ export default function Home() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={ handleDrawerClose }>
             <ChevronLeftIcon />
           </IconButton>
         </div>
