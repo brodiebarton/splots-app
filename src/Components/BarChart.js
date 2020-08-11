@@ -98,26 +98,30 @@ class BarChart extends React.Component {
   }
 
   componentDidMount() {
-    // const chartElement = document.querySelector('.highcharts-root');
-    // chartElement.addEventListener('click', (e) => this.chartClickHandler(e, chartElement));
-    this.barChart = document.querySelector("#myBarChar");
+    this.barChart = Highcharts.chart(
+      document.getElementById("myBarChart"),
+      this.state.options
+    );
+    this.chartClickListener = document
+      .getElementById("myBarChart")
+      .addEventListener("click", this.chartClickHandler.bind(this));
+  }
+
+  componentDidUpdate() {
+    console.log("componentDidUpdate");
+    this.barChart.update(this.state.options);
+  }
+
+  componentWillUnmount() {
+    document
+      .getElementById("myBarChart")
+      .removeEventListener("click", this.chartClickHandler);
   }
 
   chartClickHandler(e) {
-    const selectedPoint = this.barChart.getSelectedPoints();
-    if (selectedPoint[0]) {
-      this.setState({
-        ...this.state,
-        user: { isPointSelected: true },
-      });
-      const { category, options } = selectedPoint[0];
-      console.log(`${category} ${options.y}`);
-    } else {
-      this.setState({
-        ...this.state,
-        user: { isPointSelected: true },
-      });
-    }
+    console.log(this.barChart);
+    console.log(e.target);
+    console.log(this.barChart.getSelectedPoints());
   }
 
   chartNameChange(e) {
@@ -137,17 +141,7 @@ class BarChart extends React.Component {
         <Grid className={classes.container}>
           {/* Chart */}
           <Paper className={classes.paper}>
-            {/* <div
-              key="myBarChart"
-              id="myBarChart"
-              className={classes.myBarChart}
-              onClick={this.chartClickHandler.bind(this)}
-            ></div> */}
-            <HighchartsReact
-              id="myBarChart"
-              className={classes.myBarChart}
-              options={this.state.options}
-            />
+            <div id="myBarChart" className={classes.myBarChart}></div>
           </Paper>
           <Paper className={classes.sideBar}>
             <form noValidate autoComplete="off">
