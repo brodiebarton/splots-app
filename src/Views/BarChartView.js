@@ -55,6 +55,11 @@ class BarChartView extends React.Component {
     super(props);
 
     this.barChartRef = React.createRef();
+
+    this.chartClickHandler = this.chartClickHandler.bind(this);
+    this.chartNameChange = this.chartNameChange.bind(this);
+    this.chartPointChange = this.chartPointChange.bind(this);
+
     this.state = {
       point: {
         isPointSelected: false,
@@ -131,10 +136,26 @@ class BarChartView extends React.Component {
   }
 
   chartPointChange(e) {
+    const [barChartOptions, setBarChartOptions] = this.context;
     switch (e.target.id) {
       case "pointCategoryInput":
+        e.persist();
+        let categories = barChartOptions.xAxis.categories;
+        console.log(categories.indexOf(this.state.point.categoryName));
+        this.setState({
+          ...this.state,
+          point: { ...this.state.point, categoryName: e.target.value },
+        });
+        // ! NEED TO UPDATE CONTEXT AFTER
         break;
       case "pointYValueInput":
+        let data = barChartOptions.series[0].data;
+        this.setState({
+          ...this.state,
+          point: { ...this.state.point, yValue: e.target.value },
+        });
+        console.log(data);
+        // ! NEED TO UPDATE CONTEXT AFTER
         break;
 
       default:
@@ -171,30 +192,27 @@ class BarChartView extends React.Component {
                 placeholder="Enter Chart Name"
                 variant="outlined"
                 // value={barChartOptions.title.text}
-                onChange={(e) => {
-                  this.chartNameChange(e);
-                }}
+                onChange={this.chartNameChange}
               />
               {isPointSelected ? (
                 <>
                   <TextField
                     id="pointCategoryInput"
                     label="Category"
-                    placeholder={this.state.point.categoryName}
+                    value={this.state.point.categoryName}
                     variant="outlined"
-                    onChange={(e) => {
-                      this.chartPointChange(e);
+                    onChange={this.chartPointChange}
+                    onEnded={() => {
+                      console.log("onended");
                     }}
                   />
                   <TextField
                     id="pointYValueInput"
-                    label="Number"
+                    label="Value"
+                    value={this.state.point.yValue}
                     type="number"
-                    placeholder={this.state.point.yValue}
                     variant="outlined"
-                    onChange={(e) => {
-                      this.chartPointChange(e);
-                    }}
+                    onChange={this.chartPointChange}
                   />
                 </>
               ) : (
