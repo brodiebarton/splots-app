@@ -1,13 +1,10 @@
-import React, { useContext, useRef } from "react";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import Container from "@material-ui/core/Container";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
-import { BarChartProvider, BarChartContext } from "../Contexts/BarChartContext";
-import BarChart from "./BarChart";
+import { BarChartContext } from "../Contexts/BarChartContext";
+import BarChart from "../Components/BarChart";
 
 const styles = (theme) => ({
   container: {

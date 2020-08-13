@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Highcharts from "highcharts";
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BarChart = React.forwardRef((props, ref) => {
   const classes = useStyles();
-  const [barChartOptions, setBarChartOptions] = useContext(BarChartContext);
+  const [barChartOptions] = useContext(BarChartContext);
   //   const barChartRef = React.createRef();
 
   //   useEffect(() => {
