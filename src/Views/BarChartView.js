@@ -85,8 +85,8 @@ class BarChartView extends React.Component {
   componentDidUpdate() {
     // console.log("componentDidUpdate");
     // this.barChart.update(this.state.options);
-    console.log("component update");
-    console.log(this.barChartRef.current.chart.getSelectedPoints());
+    // console.log("component update");
+    // console.log(this.barChartRef.current.chart.getSelectedPoints());
   }
 
   componentWillUnmount() {
@@ -105,7 +105,8 @@ class BarChartView extends React.Component {
     // console.log(e.target);
     // console.log(this.barChart.getSelectedPoints());
     const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
-    console.log(selectedPoint.length);
+
+    console.log(this.state.point.categoryName);
 
     selectedPoint.length > 0
       ? this.setState({
@@ -125,37 +126,45 @@ class BarChartView extends React.Component {
 
   chartNameChange(e) {
     // e.persist();
-    const [barChartOptions, setBarChartOptions] = this.context;
-
-    e.target.value !== ""
-      ? setBarChartOptions({
-          ...barChartOptions,
-          title: { text: e.target.value },
-        })
-      : setBarChartOptions({ ...barChartOptions, title: { text: "My Chart" } });
+    const { dispatch } = this.context;
+    dispatch({ type: "CHANGE_CHART_TITLE", text: e.target.value });
+    // e.target.value !== ''
+    //   ? setBarChartOptions({
+    //       ...barChartOptions,
+    //       title: { text: e.target.value },
+    //     })
+    //   : setBarChartOptions({ ...barChartOptions, title: { text: 'My Chart' } });
   }
 
   chartPointChange(e) {
-    const [barChartOptions, setBarChartOptions] = this.context;
+    const { barChartOptions, dispatch } = this.context;
+
     switch (e.target.id) {
       case "pointCategoryInput":
         e.persist();
-        let categories = barChartOptions.xAxis.categories;
-        console.log(categories.indexOf(this.state.point.categoryName));
+        const oldCategory = this.state.point.categoryName;
+        const newCategory = e.target.value;
+
         this.setState({
           ...this.state,
-          point: { ...this.state.point, categoryName: e.target.value },
+          point: { ...this.state.point, categoryName: newCategory },
         });
         // ! NEED TO UPDATE CONTEXT AFTER
+        dispatch({
+          type: "CHANGE_CATEGORY",
+          old: oldCategory,
+          new: newCategory,
+        });
         break;
       case "pointYValueInput":
-        let data = barChartOptions.series[0].data;
+        const oldValue = this.state.point.yValue;
+        const newValue = e.target.value;
         this.setState({
           ...this.state,
-          point: { ...this.state.point, yValue: e.target.value },
+          point: { ...this.state.point, yValue: Number(newValue) },
         });
-        console.log(data);
         // ! NEED TO UPDATE CONTEXT AFTER
+        dispatch({ type: "CHANGE_Y_VALUE", old: oldValue, new: newValue });
         break;
 
       default:
@@ -166,7 +175,7 @@ class BarChartView extends React.Component {
   render() {
     const { classes } = this.props;
     const isPointSelected = this.state.point.isPointSelected;
-    // const [barChartOptions, setBarChartOptions] = this.context;
+    const { barChartOptions } = this.context;
     // console.log(barChartOptions.title.text);
     return (
       <>
@@ -183,35 +192,34 @@ class BarChartView extends React.Component {
                 e.preventDefault();
               }}
               noValidate
-              autoComplete="off"
-              aria-label="Chart Modification Form"
-            >
+              autoComplete='off'
+              aria-label='Chart Modification Form'>
               <TextField
-                id="chartName"
-                label="Chart Name"
-                placeholder="Enter Chart Name"
-                variant="outlined"
-                // value={barChartOptions.title.text}
+                id='chartName'
+                label='Chart Name'
+                placeholder='Enter Chart Name'
+                variant='outlined'
+                value={barChartOptions.title.text}
                 onChange={this.chartNameChange}
               />
               {isPointSelected ? (
                 <>
                   <TextField
-                    id="pointCategoryInput"
-                    label="Category"
+                    id='pointCategoryInput'
+                    label='Category'
                     value={this.state.point.categoryName}
-                    variant="outlined"
+                    variant='outlined'
                     onChange={this.chartPointChange}
                     onEnded={() => {
                       console.log("onended");
                     }}
                   />
                   <TextField
-                    id="pointYValueInput"
-                    label="Value"
+                    id='pointYValueInput'
+                    label='Value'
                     value={this.state.point.yValue}
-                    type="number"
-                    variant="outlined"
+                    type='number'
+                    variant='outlined'
                     onChange={this.chartPointChange}
                   />
                 </>
