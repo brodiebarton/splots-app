@@ -106,18 +106,23 @@ class BarChartView extends React.Component {
     // console.log(this.barChart.getSelectedPoints());
     const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
 
-    console.log(this.state.point.categoryName);
+    console.log("SELECTED POINT");
+    console.log(selectedPoint);
 
     selectedPoint.length > 0
       ? this.setState({
           point: {
-            isPointSelected: true,
+            isPointSelected: selectedPoint[0].selected,
             categoryName: selectedPoint[0].category,
             yValue: selectedPoint[0].y,
           },
         })
       : this.setState({
-          point: { ...this.state.point, isPointSelected: false },
+          point: {
+            isPointSelected: false,
+            categoryName: "",
+            yValue: 0,
+          },
         });
 
     // console.log(this.barChartRef.current.chart);
@@ -139,6 +144,8 @@ class BarChartView extends React.Component {
   chartPointChange(e) {
     const { barChartOptions, dispatch } = this.context;
 
+    // const prevState = { ...this.state };
+
     switch (e.target.id) {
       case "pointCategoryInput":
         e.persist();
@@ -156,13 +163,16 @@ class BarChartView extends React.Component {
           new: newCategory,
         });
         break;
+
       case "pointYValueInput":
         const oldValue = this.state.point.yValue;
         const newValue = e.target.value;
+
         this.setState({
           ...this.state,
-          point: { ...this.state.point, yValue: Number(newValue) },
+          point: { ...this.state.point, yValue: parseFloat(newValue) },
         });
+
         // ! NEED TO UPDATE CONTEXT AFTER
         dispatch({ type: "CHANGE_Y_VALUE", old: oldValue, new: newValue });
         break;
@@ -170,6 +180,11 @@ class BarChartView extends React.Component {
       default:
         break;
     }
+
+    console.log(this.state);
+
+    // Update and Redraw Chart
+    this.barChartRef.current.chart.update(barChartOptions, true);
   }
 
   render() {

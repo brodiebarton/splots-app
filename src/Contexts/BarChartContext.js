@@ -18,13 +18,12 @@ const barChartReducer = (state, action) => {
         xAxis: { categories: newCategories },
       };
     case "CHANGE_Y_VALUE":
-      console.log(action.old, action.new);
       let newData = [...state.series[0].data];
       const yIndex = state.series[0].data.findIndex(
         (el) => el.y === action.old
       );
       console.log(yIndex);
-      newData[yIndex].y = Number(action.new);
+      newData[yIndex].y = parseFloat(action.new);
       return {
         ...state,
         series: { ...state.series, 0: { ...state.series[0], data: newData } },
