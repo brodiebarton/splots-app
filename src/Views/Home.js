@@ -136,46 +136,42 @@ export default function Home() {
       <div className={classes.root}>
         <CssBaseline />
         <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
-        >
+          position='absolute'
+          className={clsx(classes.appBar, open && classes.appBarShift)}>
           <Toolbar className={classes.toolbar}>
             <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
+              edge='start'
+              color='inherit'
+              aria-label='open drawer'
               onClick={handleDrawerOpen}
               className={clsx(
                 classes.menuButton,
                 open && classes.menuButtonHidden
-              )}
-            >
+              )}>
               <MenuIcon />
             </IconButton>
             <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
+              component='h1'
+              variant='h6'
+              color='inherit'
               noWrap
-              className={classes.title}
-            >
+              className={classes.title}>
               Splots Charts
             </Typography>
-            <IconButton color="inherit">
+            <IconButton color='inherit' onClick={handleAddButtonClick}>
               {/* <Badge badgeContent={0} color="secondary"> */}
-              <AddIcon onClick={handleAddButtonClick} />
+              <AddIcon />
               {/* </Badge> */}
             </IconButton>
           </Toolbar>
         </AppBar>
 
         <Drawer
-          variant="permanent"
+          variant='permanent'
           classes={{
             paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
           }}
-          open={open}
-        >
+          open={open}>
           <div className={classes.toolbarIcon}>
             <IconButton onClick={handleDrawerClose}>
               <ChevronLeftIcon />
@@ -194,9 +190,9 @@ export default function Home() {
           <div className={classes.appBarSpacer} />
           <BarChartProvider>
             <Router>
-              <Dashboard path="dashboard" />
-              <BarChartView path="bar-chart" />
-              <ScatterPlot path="scatter-plot" />
+              <Dashboard path='dashboard' />
+              <BarChartView path='bar-chart' />
+              <ScatterPlot path='scatter-plot' />
             </Router>
           </BarChartProvider>
         </main>

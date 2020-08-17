@@ -62,7 +62,7 @@ class BarChartView extends React.Component {
 
     this.state = {
       point: {
-        isPointSelected: false,
+        // isPointSelected: false,
         categoryName: "",
         yValue: 0,
       },
@@ -77,15 +77,37 @@ class BarChartView extends React.Component {
     // this.chartClickListener = document
     //   .getElementById("myBarChart")
     //   .addEventListener("click", this.chartClickHandler.bind(this));
-    this.barChartRef.current.container.current.addEventListener("click", (e) =>
-      this.chartClickHandler(e)
+
+    this.barChartRef.current.container.current.addEventListener(
+      "click",
+      (e) => {
+        this.chartClickHandler(e);
+      }
     );
   }
+
+  //   shouldComponentUpdate(nextProps, nextState) {
+  //     console.log("shouldComponentUpdate");
+  //     if (nextState !== this.state) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+
+  //   componentWillUpdate(nextProps, nextState) {
+  //     console.log("componentWillUpdate");
+  //     const { barChartOptions } = this.context;
+  //     this.barChartRef.current.chart.series[0].setData(
+  //       barChartOptions.series[0].data,
+  //       true
+  //     );
+  //     this.barChartRef.current.chart.update(barChartOptions, true);
+  //   }
 
   componentDidUpdate() {
     // console.log("componentDidUpdate");
     // this.barChart.update(this.state.options);
-    // console.log("component update");
     // console.log(this.barChartRef.current.chart.getSelectedPoints());
   }
 
@@ -97,17 +119,16 @@ class BarChartView extends React.Component {
       "click",
       (e) => this.chartClickHandler(e)
     );
-    console.log("listener unmounted");
   }
 
   chartClickHandler(e) {
     // console.log(this.barChart);
-    // console.log(e.target);
+    console.log(e.target);
     // console.log(this.barChart.getSelectedPoints());
     const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
 
-    console.log("SELECTED POINT");
-    console.log(selectedPoint);
+    // console.log("SELECTED POINT");
+    // console.log(selectedPoint);
 
     selectedPoint.length > 0
       ? this.setState({
@@ -124,7 +145,6 @@ class BarChartView extends React.Component {
             yValue: 0,
           },
         });
-
     // console.log(this.barChartRef.current.chart);
     // console.log(e);
   }
@@ -150,7 +170,7 @@ class BarChartView extends React.Component {
       case "pointCategoryInput":
         e.persist();
         const oldCategory = this.state.point.categoryName;
-        const newCategory = e.target.value;
+        const newCategory = e.target.value === "" ? "" : e.target.value;
 
         this.setState({
           ...this.state,
@@ -166,25 +186,33 @@ class BarChartView extends React.Component {
 
       case "pointYValueInput":
         const oldValue = this.state.point.yValue;
-        const newValue = e.target.value;
+        const newValue = Number(e.target.value);
 
-        this.setState({
-          ...this.state,
-          point: { ...this.state.point, yValue: parseFloat(newValue) },
-        });
+        this.setState(
+          {
+            ...this.state,
+            point: { ...this.state.point, yValue: parseFloat(newValue) },
+          },
+          () => {
+            // ! NEED TO UPDATE CONTEXT AFTER
+            dispatch({ type: "CHANGE_Y_VALUE", old: oldValue, new: newValue });
+            console.log("CALLBACK");
+            // this.barChartRef.current.chart.update(barChartOptions, true);
+            this.barChartRef.current.chart.series[0].setData(
+              barChartOptions.series[0].data,
+              true
+            );
+          }
+        );
 
-        // ! NEED TO UPDATE CONTEXT AFTER
-        dispatch({ type: "CHANGE_Y_VALUE", old: oldValue, new: newValue });
         break;
 
       default:
         break;
     }
 
-    console.log(this.state);
-
     // Update and Redraw Chart
-    this.barChartRef.current.chart.update(barChartOptions, true);
+    // this.barChartRef.current.chart.update(barChartOptions, true);
   }
 
   render() {
@@ -225,15 +253,13 @@ class BarChartView extends React.Component {
                     value={this.state.point.categoryName}
                     variant='outlined'
                     onChange={this.chartPointChange}
-                    onEnded={() => {
-                      console.log("onended");
-                    }}
                   />
                   <TextField
                     id='pointYValueInput'
                     label='Value'
-                    value={this.state.point.yValue}
+                    value={parseFloat(this.state.point.yValue)}
                     type='number'
+                    step={1}
                     variant='outlined'
                     onChange={this.chartPointChange}
                   />

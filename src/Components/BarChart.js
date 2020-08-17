@@ -31,12 +31,9 @@ const BarChart = React.forwardRef((props, ref) => {
   // const [chart, setChart] = useState(ref);
   // const chartRef = useRef(chart);
 
-  // useEffect(() => {
-  //   chartRef.current = ref;
-  //   setChart(ref);
-  // }, []);
-
-  useEffect(() => {}, [props, ref]);
+  useEffect(() => {
+    ref.current.chart.update(barChartOptions, true);
+  }, [props, ref, barChartOptions]);
 
   return (
     <div id='myBarChart' className={classes.myBarChart}>
