@@ -4,6 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { BarChartContext } from "../Contexts/BarChartContext";
+import draggable from "highcharts/modules/draggable-points";
+
+// init Highcharts modules
+draggable(Highcharts);
 
 const useStyles = makeStyles((theme) => ({
   paper: {

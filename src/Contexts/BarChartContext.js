@@ -18,18 +18,20 @@ const barChartReducer = (state, action) => {
         xAxis: { categories: newCategories },
       };
     case "CHANGE_Y_VALUE":
-      let newData = [...state.series[0].data];
+      let dataArray = [...state.series[0].data];
+
       const yIndex = state.series[0].data.findIndex(
         (el) => el.y === action.old
       );
       console.log(yIndex);
-      newData[yIndex].y = parseFloat(action.new);
+      dataArray[yIndex].y = parseFloat(action.new);
       return {
         ...state,
-        series: { ...state.series, 0: { ...state.series[0], data: newData } },
+        series: { ...state.series, 0: { ...state.series[0], data: dataArray } },
       };
 
     default:
+      console.log("default");
       return state;
   }
 };
@@ -53,6 +55,27 @@ export const BarChartProvider = (props) => {
       {
         type: "column",
         allowPointSelect: true,
+        dragDrop: {
+          draggableY: true,
+          dragPrecisionY: 1,
+        },
+        point: {
+          events: {
+            // dragStart: function (e) {
+            //   console.log("drag start");
+            //   console.log(e);
+            // },
+            // drag: function (e) {
+            //   console.log("dragging...");
+            // },
+            drop: function (e) {
+              console.log("drag end");
+              const originKey = Object.keys(e.origin.points)[0];
+              const oldYValue = e.origin.points[originKey].y;
+              const newYValue = e.newPoint.y;
+            },
+          },
+        },
         data: [
           { selected: false, y: 29.9 },
           { selected: false, y: 71.5 },

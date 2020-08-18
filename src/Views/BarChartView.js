@@ -109,6 +109,9 @@ class BarChartView extends React.Component {
     // console.log("componentDidUpdate");
     // this.barChart.update(this.state.options);
     // console.log(this.barChartRef.current.chart.getSelectedPoints());
+    console.log(
+      this.barChartRef.current.chart.options.plotOptions.column.point.events
+    );
   }
 
   componentWillUnmount() {
