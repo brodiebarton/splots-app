@@ -30,6 +30,10 @@ const barChartReducer = (state, action) => {
         series: { ...state.series, 0: { ...state.series[0], data: dataArray } },
       };
 
+    case "DELETE_POINT":
+      console.log(action.test);
+      return state;
+
     default:
       console.log("default");
       return state;
@@ -70,9 +74,10 @@ export const BarChartProvider = (props) => {
             // },
             drop: function (e) {
               console.log("drag end");
-              const originKey = Object.keys(e.origin.points)[0];
-              const oldYValue = e.origin.points[originKey].y;
-              const newYValue = e.newPoint.y;
+              console.log(barChartOptions.series[0].data);
+              // const originKey = Object.keys(e.origin.points)[0];
+              // const oldYValue = e.origin.points[originKey].y;
+              // const newYValue = e.newPoint.y;
             },
           },
         },

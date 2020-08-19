@@ -2,9 +2,11 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
+import Divider from "@material-ui/core/Divider";
 import { withStyles } from "@material-ui/core/styles";
 import { BarChartContext } from "../Contexts/BarChartContext";
 import BarChart from "../Components/BarChart";
+import DeleteButton from "../Components/DeleteButton";
 
 const styles = (theme) => ({
   container: {
@@ -15,6 +17,12 @@ const styles = (theme) => ({
       flexDirection: "column",
     },
     alignContent: "center",
+  },
+  section: {
+    display: "flex",
+    width: "100%",
+    marginTop: theme.spacing(2),
+    flexDirection: "column",
   },
   paper: {
     padding: theme.spacing(2),
@@ -84,6 +92,23 @@ class BarChartView extends React.Component {
         this.chartClickHandler(e);
       }
     );
+
+    this.barChartRef.current.container.current.addEventListener(
+      "mouseup",
+      (e) => {
+        console.log("mouse UP");
+        // ! UPDATE POINT STATE
+      }
+    );
+    // console.log(this.barChartRef.current.chart.options.series[0].point.events);
+
+    // this.barChartRef.current.chart.addEvent(
+    //   this.barChartRef.current.chart,
+    //   "drop",
+    //   (e) => {
+    //     console.log("drag event test");
+    //   }
+    // );
   }
 
   //   shouldComponentUpdate(nextProps, nextState) {
@@ -109,9 +134,9 @@ class BarChartView extends React.Component {
     // console.log("componentDidUpdate");
     // this.barChart.update(this.state.options);
     // console.log(this.barChartRef.current.chart.getSelectedPoints());
-    console.log(
-      this.barChartRef.current.chart.options.plotOptions.column.point.events
-    );
+    // console.log(
+    //   this.barChartRef.current.chart.options.plotOptions.column.point.events
+    // );
   }
 
   componentWillUnmount() {
@@ -122,6 +147,8 @@ class BarChartView extends React.Component {
       "click",
       (e) => this.chartClickHandler(e)
     );
+
+    this.barChartRef.current.container.current.removeEventListener("mouseup");
   }
 
   chartClickHandler(e) {
@@ -179,7 +206,7 @@ class BarChartView extends React.Component {
           ...this.state,
           point: { ...this.state.point, categoryName: newCategory },
         });
-        // ! NEED TO UPDATE CONTEXT AFTER
+
         dispatch({
           type: "CHANGE_CATEGORY",
           old: oldCategory,
@@ -197,9 +224,8 @@ class BarChartView extends React.Component {
             point: { ...this.state.point, yValue: parseFloat(newValue) },
           },
           () => {
-            // ! NEED TO UPDATE CONTEXT AFTER
             dispatch({ type: "CHANGE_Y_VALUE", old: oldValue, new: newValue });
-            console.log("CALLBACK");
+
             // this.barChartRef.current.chart.update(barChartOptions, true);
             this.barChartRef.current.chart.series[0].setData(
               barChartOptions.series[0].data,
@@ -240,36 +266,45 @@ class BarChartView extends React.Component {
               noValidate
               autoComplete='off'
               aria-label='Chart Modification Form'>
-              <TextField
-                id='chartName'
-                label='Chart Name'
-                placeholder='Enter Chart Name'
-                variant='outlined'
-                value={barChartOptions.title.text}
-                onChange={this.chartNameChange}
-              />
-              {isPointSelected ? (
-                <>
+              <section>
+                <div className={classes.section}>
                   <TextField
-                    id='pointCategoryInput'
-                    label='Category'
-                    value={this.state.point.categoryName}
+                    id='chartName'
+                    label='Chart Name'
+                    placeholder='Enter Chart Name'
                     variant='outlined'
-                    onChange={this.chartPointChange}
+                    value={barChartOptions.title.text}
+                    onChange={this.chartNameChange}
                   />
-                  <TextField
-                    id='pointYValueInput'
-                    label='Value'
-                    value={parseFloat(this.state.point.yValue)}
-                    type='number'
-                    step={1}
-                    variant='outlined'
-                    onChange={this.chartPointChange}
-                  />
-                </>
-              ) : (
-                <></>
-              )}
+                </div>
+                {isPointSelected ? (
+                  <>
+                    <Divider variant='middle' />
+                    <div className={classes.section}>
+                      <TextField
+                        id='pointCategoryInput'
+                        label='Category'
+                        value={this.state.point.categoryName}
+                        variant='outlined'
+                        onChange={this.chartPointChange}
+                      />
+                      <DeleteButton selectedPoint={this.state.point} />
+
+                      {/* <TextField
+													id='pointYValueInput'
+													label='Value'
+													value={parseFloat(this.state.point.yValue)}
+													type='number'
+													step={1}
+													variant='outlined'
+													onChange={this.chartPointChange}
+												/> */}
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </section>
             </form>
           </Paper>
         </Grid>
