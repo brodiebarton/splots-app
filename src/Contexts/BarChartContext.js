@@ -3,6 +3,9 @@ import React, { createContext, useReducer } from "react";
 export const BarChartContext = createContext();
 
 const barChartReducer = (state, action) => {
+  let points = [...state.series[0].data];
+  let categories = [...state.xAxis.categories];
+
   switch (action.type) {
     case "CHANGE_CHART_TITLE":
       // return action.text !== ""
@@ -10,29 +13,46 @@ const barChartReducer = (state, action) => {
       //   : { ...state, title: { text: "My Chart" } };
       return { ...state, title: { text: action.text } };
     case "CHANGE_CATEGORY":
-      let newCategories = [...state.xAxis.categories];
       const catIndex = state.xAxis.categories.indexOf(action.old);
-      newCategories[catIndex] = action.new;
+      categories[catIndex] = action.new;
       return {
         ...state,
-        xAxis: { categories: newCategories },
+        xAxis: { categories: categories },
       };
     case "CHANGE_Y_VALUE":
-      let dataArray = [...state.series[0].data];
-
       const yIndex = state.series[0].data.findIndex(
         (el) => el.y === action.old
       );
       console.log(yIndex);
-      dataArray[yIndex].y = parseFloat(action.new);
+      points[yIndex].y = parseFloat(action.new);
       return {
         ...state,
-        series: { ...state.series, 0: { ...state.series[0], data: dataArray } },
+        series: { ...state.series, 0: { ...state.series[0], data: points } },
       };
 
     case "DELETE_POINT":
-      console.log(action.test);
-      return state;
+      const indexOfPoint = state.series[0].data.findIndex(
+        (el) => el.y === action.selected.yValue
+      );
+      points.splice(indexOfPoint, 1);
+      categories.splice(indexOfPoint, 1);
+      // const check = {
+      //   ...state,
+      //   series: {
+      //     ...state.series,
+      //     0: { ...state.series[0], data: points },
+      //   },
+      //   xAxis: { ...state.xAxis, categories: categories },
+      // };
+
+      return {
+        ...state,
+        series: {
+          ...state.series,
+          0: { ...state.series[0], data: points },
+        },
+        xAxis: { ...state.xAxis, categories: categories },
+      };
 
     default:
       console.log("default");
@@ -74,7 +94,8 @@ export const BarChartProvider = (props) => {
             // },
             drop: function (e) {
               console.log("drag end");
-              console.log(barChartOptions.series[0].data);
+              // console.log(e.target);
+              // console.log(barChartOptions.series[0].data);
               // const originKey = Object.keys(e.origin.points)[0];
               // const oldYValue = e.origin.points[originKey].y;
               // const newYValue = e.newPoint.y;

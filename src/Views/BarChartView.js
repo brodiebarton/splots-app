@@ -96,8 +96,16 @@ class BarChartView extends React.Component {
     this.barChartRef.current.container.current.addEventListener(
       "mouseup",
       (e) => {
-        console.log("mouse UP");
-        // ! UPDATE POINT STATE
+        const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+        if (selectedPoint.length !== 0) {
+          this.setState({
+            point: {
+              isPointSelected: selectedPoint[0].options.selected,
+              categoryName: selectedPoint[0].category,
+              yValue: selectedPoint[0].y,
+            },
+          });
+        }
       }
     );
     // console.log(this.barChartRef.current.chart.options.series[0].point.events);
@@ -153,7 +161,6 @@ class BarChartView extends React.Component {
 
   chartClickHandler(e) {
     // console.log(this.barChart);
-    console.log(e.target);
     // console.log(this.barChart.getSelectedPoints());
     const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
 
@@ -288,7 +295,7 @@ class BarChartView extends React.Component {
                         variant='outlined'
                         onChange={this.chartPointChange}
                       />
-                      <DeleteButton selectedPoint={this.state.point} />
+                      <DeleteButton selected={this.state.point} />
 
                       {/* <TextField
 													id='pointYValueInput'

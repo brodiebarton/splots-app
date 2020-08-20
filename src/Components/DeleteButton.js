@@ -18,7 +18,7 @@ const DeleteButton = (props) => {
 
   const clickHandle = () => {
     // console.log(props.selectedPoint);
-    dispatch({ type: "DELETE_POINT", test: props.selectedPoint });
+    dispatch({ type: "DELETE_POINT", selected: props.selected });
   };
 
   return (
