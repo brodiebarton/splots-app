@@ -7,6 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { BarChartContext } from "../Contexts/BarChartContext";
 import BarChart from "../Components/BarChart";
 import DeleteButton from "../Components/DeleteButton";
+import AddButton from "../Components/AddButton";
 
 const styles = (theme) => ({
   container: {
@@ -67,14 +68,25 @@ class BarChartView extends React.Component {
     this.chartClickHandler = this.chartClickHandler.bind(this);
     this.chartNameChange = this.chartNameChange.bind(this);
     this.chartPointChange = this.chartPointChange.bind(this);
+    this.yAxisTitleChange = this.yAxisTitleChange.bind(this);
+    this.yAxisRangeChange = this.yAxisRangeChange.bind(this);
+    this.chartDragHandler = this.chartDragHandler.bind(this);
+    this.changeYTickHandler = this.changeYTickHandler.bind(this);
 
     this.state = {
       point: {
-        // isPointSelected: false,
+        isPointSelected: false,
         categoryName: "",
         yValue: 0,
       },
     };
+  }
+
+  selectedStateHandler(value) {
+    this.setState({
+      ...this.state,
+      point: { ...this.state.point, isPointSelected: value },
+    });
   }
 
   componentDidMount() {
@@ -88,26 +100,25 @@ class BarChartView extends React.Component {
 
     this.barChartRef.current.container.current.addEventListener(
       "click",
-      (e) => {
-        this.chartClickHandler(e);
-      }
+      this.chartClickHandler
     );
 
     this.barChartRef.current.container.current.addEventListener(
       "mouseup",
-      (e) => {
-        const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
-        if (selectedPoint.length !== 0) {
-          this.setState({
-            point: {
-              isPointSelected: selectedPoint[0].options.selected,
-              categoryName: selectedPoint[0].category,
-              yValue: selectedPoint[0].y,
-            },
-          });
-        }
-      }
+      this.chartDragHandler
     );
+    // (e) => {
+    //   const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+    //   if (selectedPoint.length !== 0) {
+    //     this.setState({
+    //       point: {
+    //         isPointSelected: selectedPoint[0].options.selected,
+    //         categoryName: selectedPoint[0].category,
+    //         yValue: selectedPoint[0].y,
+    //       },
+    //     });
+    //   }
+    // }
     // console.log(this.barChartRef.current.chart.options.series[0].point.events);
 
     // this.barChartRef.current.chart.addEvent(
@@ -153,19 +164,32 @@ class BarChartView extends React.Component {
     //   .removeEventListener("click", this.chartClickHandler);
     this.barChartRef.current.container.current.removeEventListener(
       "click",
-      (e) => this.chartClickHandler(e)
+      this.chartClickHandler
     );
 
-    this.barChartRef.current.container.current.removeEventListener("mouseup");
+    this.barChartRef.current.container.current.removeEventListener(
+      "mouseup",
+      this.chartDragHandler
+    );
   }
 
   chartClickHandler(e) {
-    // console.log(this.barChart);
-    // console.log(this.barChart.getSelectedPoints());
-    const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+    const { barChartOptions } = this.context;
 
-    // console.log("SELECTED POINT");
-    // console.log(selectedPoint);
+    let selectedPoint = [];
+
+    if (barChartOptions.xAxis.categories.includes(e.target.innerHTML)) {
+      const index = barChartOptions.xAxis.categories.indexOf(
+        e.target.innerHTML
+      );
+      selectedPoint.push({
+        selected: true,
+        category: barChartOptions.xAxis.categories[index],
+        yValue: barChartOptions.series[0].data[index],
+      });
+    } else {
+      selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+    }
 
     selectedPoint.length > 0
       ? this.setState({
@@ -186,6 +210,19 @@ class BarChartView extends React.Component {
     // console.log(e);
   }
 
+  chartDragHandler(e) {
+    const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+    if (selectedPoint.length !== 0) {
+      this.setState({
+        point: {
+          isPointSelected: selectedPoint[0].options.selected,
+          categoryName: selectedPoint[0].category,
+          yValue: selectedPoint[0].y,
+        },
+      });
+    }
+  }
+
   chartNameChange(e) {
     // e.persist();
     const { dispatch } = this.context;
@@ -196,6 +233,40 @@ class BarChartView extends React.Component {
     //       title: { text: e.target.value },
     //     })
     //   : setBarChartOptions({ ...barChartOptions, title: { text: 'My Chart' } });
+  }
+
+  yAxisTitleChange(e) {
+    const { dispatch } = this.context;
+    dispatch({ type: "CHANGE_Y_TITLE", newYTitle: e.target.value });
+  }
+
+  yAxisRangeChange(e) {
+    const { dispatch } = this.context;
+
+    switch (e.target.id) {
+      case "chartYMin":
+        dispatch({
+          type: "CHANGE_Y_RANGE_MIN",
+          newMin: Number(e.target.value),
+        });
+        break;
+      case "chartYMax":
+        dispatch({
+          type: "CHANGE_Y_RANGE_MAX",
+          newMax: Number(e.target.value),
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
+  changeYTickHandler(e) {
+    const { dispatch } = this.context;
+    dispatch({
+      type: "CHANGE_Y_TICK_INTERVAL",
+      newTick: Number(e.target.value),
+    });
   }
 
   chartPointChange(e) {
@@ -254,7 +325,7 @@ class BarChartView extends React.Component {
   render() {
     const { classes } = this.props;
     const isPointSelected = this.state.point.isPointSelected;
-    const { barChartOptions } = this.context;
+    const { barChartOptions, dispatch } = this.context;
     // console.log(barChartOptions.title.text);
     return (
       <>
@@ -283,6 +354,44 @@ class BarChartView extends React.Component {
                     value={barChartOptions.title.text}
                     onChange={this.chartNameChange}
                   />
+                  <TextField
+                    id='yAxisTitle'
+                    label='Y Axis Title'
+                    placeholder='Enter Y Axis Title'
+                    variant='outlined'
+                    value={barChartOptions.yAxis.title.text}
+                    onChange={this.yAxisTitleChange}
+                  />
+                  <div>
+                    <TextField
+                      id='chartYMin'
+                      label='Y Axis Min'
+                      placeholder='Enter Chart Name'
+                      variant='outlined'
+                      type='number'
+                      value={barChartOptions.yAxis.min}
+                      onChange={this.yAxisRangeChange}
+                    />
+                    <TextField
+                      id='chartYMax'
+                      label='Y Axis Max'
+                      placeholder='Enter Y Axis Max'
+                      variant='outlined'
+                      type='number'
+                      value={barChartOptions.yAxis.max}
+                      onChange={this.yAxisRangeChange}
+                    />
+                  </div>
+                  <TextField
+                    id='chartYInterval'
+                    label='Y Axis Interval'
+                    placeholder='Enter Y Axis Interval'
+                    variant='outlined'
+                    type='number'
+                    value={barChartOptions.yAxis.tickInterval}
+                    onChange={this.changeYTickHandler}
+                  />
+                  <AddButton />
                 </div>
                 {isPointSelected ? (
                   <>
@@ -295,7 +404,10 @@ class BarChartView extends React.Component {
                         variant='outlined'
                         onChange={this.chartPointChange}
                       />
-                      <DeleteButton selected={this.state.point} />
+                      <DeleteButton
+                        selected={this.state.point}
+                        selectedHandler={this.selectedStateHandler.bind(this)}
+                      />
 
                       {/* <TextField
 													id='pointYValueInput'

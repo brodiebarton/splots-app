@@ -36,8 +36,8 @@ const BarChart = React.forwardRef((props, ref) => {
   // const chartRef = useRef(chart);
 
   useEffect(() => {
-    console.log("UPDATE CHART");
-    console.log(barChartOptions);
+    // console.log("UPDATE CHART");
+    // console.log(barChartOptions);
     // ref.current.chart.update(barChartOptions, true);
 
     ref.current.chart.series[0].setData(
