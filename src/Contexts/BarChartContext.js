@@ -36,6 +36,15 @@ const barChartReducer = (state, action) => {
           ...state.yAxis,
           min: action.newMin,
         },
+        series: [
+          {
+            ...state.series[0],
+            dragDrop: {
+              ...state.series[0].dragDrop,
+              dragMinY: action.newMin + 1,
+            },
+          },
+        ],
       };
     case "CHANGE_Y_RANGE_MAX":
       return {
@@ -44,6 +53,15 @@ const barChartReducer = (state, action) => {
           ...state.yAxis,
           max: action.newMax,
         },
+        series: [
+          {
+            ...state.series[0],
+            dragDrop: {
+              ...state.series[0].dragDrop,
+              dragMaxY: action.newMax - 1,
+            },
+          },
+        ],
       };
     case "CHANGE_Y_TICK_INTERVAL":
       return {
@@ -60,7 +78,7 @@ const barChartReducer = (state, action) => {
       points[yIndex].y = parseFloat(action.new);
       return {
         ...state,
-        series: { ...state.series, 0: { ...state.series[0], data: points } },
+        series: [{ ...state.series[0], data: points }],
       };
 
     case "DELETE_POINT":
@@ -130,24 +148,18 @@ export const BarChartProvider = (props) => {
         dragDrop: {
           draggableY: true,
           dragPrecisionY: 0.5,
+          dragMinY: 1,
+          dragMaxY: 299,
         },
         point: {
           events: {
             // dragStart: function (e) {
-            //   console.log("drag start");
-            //   console.log(e);
             // },
             // drag: function (e) {
             //   console.log("dragging...");
             // },
-            drop: function (e) {
-              console.log("drag end");
-              // console.log(e.target);
-              // console.log(barChartOptions.series[0].data);
-              // const originKey = Object.keys(e.origin.points)[0];
-              // const oldYValue = e.origin.points[originKey].y;
-              // const newYValue = e.newPoint.y;
-            },
+            // drop: function (e) {
+            // },
           },
         },
         data: [

@@ -212,6 +212,7 @@ class BarChartView extends React.Component {
 
   chartDragHandler(e) {
     const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+
     if (selectedPoint.length !== 0) {
       this.setState({
         point: {
