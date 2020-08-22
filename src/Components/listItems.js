@@ -18,7 +18,7 @@ const linkStyle = { textDecoration: 'inherit', color: 'inherit' };
 export const mainListItems = (
   <>
     <Link to='dashboard' style={linkStyle}>
-      <ListItem id='dashboard-button' button>
+      <ListItem id='dashboard-route-button' button>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
@@ -27,7 +27,7 @@ export const mainListItems = (
     </Link>
 
     <Link to='bar-chart' style={linkStyle}>
-      <ListItem id='bar-chart-button' button>
+      <ListItem id='bar-chart-route-button' button>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
@@ -36,7 +36,7 @@ export const mainListItems = (
     </Link>
 
     <Link to='scatter-plot' style={linkStyle}>
-      <ListItem id='' button>
+      <ListItem id='scatter-plot-route-button' button>
         <ListItemIcon>
           <BubbleChartIcon />
         </ListItemIcon>
@@ -44,12 +44,12 @@ export const mainListItems = (
       </ListItem>
     </Link>
 
-    <Link to='' style={linkStyle}>
-      <ListItem id='' button>
+    <Link to='histogram' style={linkStyle}>
+      <ListItem id='histogram-route-button' button>
         <ListItemIcon>
           <TrendChartIcon />
         </ListItemIcon>
-        <ListItemText primary='Dot Plot' />
+        <ListItemText primary='Histogram' />
       </ListItem>
     </Link>
   </>

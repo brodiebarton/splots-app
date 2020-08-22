@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import BarChartView from '../Views/BarChartView';
 import ScatterPlot from '../Components/ScatterPlot';
 import Paper from '@material-ui/core/Paper';
+import { Link } from '@reach/router';
 
 const useStyles = makeStyles((theme) => ({
   chartTypeContainer: {
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  linkStyle: {
+    textDecoration: 'none',
+  },
 }));
 
 export default function Dashboard() {
@@ -28,47 +32,32 @@ export default function Dashboard() {
   return (
     <Grid className={classes.chartTypeContainer} container spacing={2}>
       <Grid item>
-        <Paper className={classes.paper}>
-          <img
-            src='https://via.placeholder.com/300'
-            alt='placeholder-img'></img>
-          <h2>Chart Type</h2>
-        </Paper>
+        <Link to='/bar-chart' className={classes.linkStyle}>
+          <Paper className={classes.paper}>
+            <img
+              src='https://via.placeholder.com/300'
+              alt='placeholder-img'></img>
+            <h2>Bar Chart</h2>
+          </Paper>
+        </Link>
       </Grid>
 
       <Grid item>
-        <Paper className={classes.paper}>
-          <img src='https://via.placeholder.com/300' alt='placeholder-img' />
-          <h2>Chart Type</h2>
-        </Paper>
+        <Link to='/scatter-plot' className={classes.linkStyle}>
+          <Paper className={classes.paper}>
+            <img src='https://via.placeholder.com/300' alt='placeholder-img' />
+            <h2>Scatter Plot</h2>
+          </Paper>
+        </Link>
       </Grid>
 
       <Grid item>
-        <Paper className={classes.paper}>
-          <img src='https://via.placeholder.com/300' alt='placeholder-img' />
-          <h2>Chart Type</h2>
-        </Paper>
-      </Grid>
-
-      <Grid item>
-        <Paper className={classes.paper}>
-          <img src='https://via.placeholder.com/300' alt='placeholder-img' />
-          <h2>Chart Type</h2>
-        </Paper>
-      </Grid>
-
-      <Grid item>
-        <Paper className={classes.paper}>
-          <img src='https://via.placeholder.com/300' alt='placeholder-img' />
-          <h2>Chart Type</h2>
-        </Paper>
-      </Grid>
-
-      <Grid item>
-        <Paper className={classes.paper}>
-          <img src='https://via.placeholder.com/300' alt='placeholder-img' />
-          <h2>Chart Type</h2>
-        </Paper>
+        <Link to='/histogram' className={classes.linkStyle}>
+          <Paper className={classes.paper}>
+            <img src='https://via.placeholder.com/300' alt='placeholder-img' />
+            <h2>Histogram</h2>
+          </Paper>
+        </Link>
       </Grid>
     </Grid>
   );

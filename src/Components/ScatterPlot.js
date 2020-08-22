@@ -1,33 +1,53 @@
-import React from "react";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import { Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import { Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-export default function ScatterPlot() {
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    paddingRight: theme.spacing(4),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+    width: '100%',
+    // flexGrow: 1,
+  },
+  scatterPlot: {
+    width: '100%',
+    minWidth: '399px',
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: '800px',
+    },
+    margin: '0 auto',
+  },
+}));
+
+const ScatterPlot = () => {
   const options = {
     title: {
-      text: "My Scatter Plot",
+      text: 'My Scatter Plot',
     },
     xAxis: {
       categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ],
     },
     series: [
       {
-        type: "scatter",
+        type: 'scatter',
         allowPointSelect: true,
         data: [
           29.9,
@@ -46,47 +66,15 @@ export default function ScatterPlot() {
       },
     ],
   };
-
-  const useStyles = makeStyles((theme) => ({
-    container: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
-    },
-    paper: {
-      padding: theme.spacing(2),
-      display: "flex",
-      overflow: "auto",
-      flexDirection: "column",
-    },
-    fixedHeight: {
-      height: 240,
-    },
-  }));
-
   const classes = useStyles();
 
   return (
-    <>
-      {/* <Container maxWidth="lg" className={classes.container}> */}
-      {/* <Grid container spacing={2}> */}
-      {/* Chart */}
-      {/* <Grid item xs={12} md={8} lg={9}> */}
+    <div id='myScatterPlot' className={classes.scatterPlot}>
       <Paper className={classes.paper}>
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Paper>
-      {/* </Grid> */}
-
-      {/* <Grid item xs={12} md={4} lg={3}>
-				</Grid> */}
-
-      {/* <Grid item xs={12}>
-					<Paper className={classes.paper}>
-						<h3>Display Test</h3>
-						<p>Below Chart</p>
-					</Paper>
-				</Grid> */}
-      {/* </Grid> */}
-      {/* </Container> */}
-    </>
+    </div>
   );
-}
+};
+
+export default ScatterPlot;

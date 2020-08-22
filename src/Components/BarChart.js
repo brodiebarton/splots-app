@@ -32,14 +32,8 @@ const useStyles = makeStyles((theme) => ({
 const BarChart = React.forwardRef((props, ref) => {
   const classes = useStyles();
   const { barChartOptions } = useContext(BarChartContext);
-  // const [chart, setChart] = useState(ref);
-  // const chartRef = useRef(chart);
 
   useEffect(() => {
-    // console.log("UPDATE CHART");
-    // console.log(barChartOptions);
-    // ref.current.chart.update(barChartOptions, true);
-
     ref.current.chart.series[0].setData(
       barChartOptions.series[0].data,
       true,
@@ -59,22 +53,5 @@ const BarChart = React.forwardRef((props, ref) => {
     </div>
   );
 });
-
-// const BarChart = () => {
-//   const classes = useStyles();
-//   const [barChartOptions, setBarChartOptions] = useContext(BarChartContext);
-//   //   const barChartRef = React.createRef();
-
-//   //   useEffect(() => {
-//   //   }, [barChartOptions]);
-
-//   return (
-//     <div id="myBarChart" className={classes.myBarChart}>
-//       <Paper className={classes.paper}>
-//         <HighchartsReact highcharts={Highcharts} options={barChartOptions} />
-//       </Paper>
-//     </div>
-//   );
-// };
 
 export default BarChart;

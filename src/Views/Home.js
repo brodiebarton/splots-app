@@ -20,6 +20,7 @@ import NewChartWizard from '../Views/NewChartWizard';
 import BarChartView from '../Views/BarChartView';
 import ScatterPlot from '../Components/ScatterPlot';
 import { BarChartProvider } from '../Contexts/BarChartContext';
+import Histogram from '../Components/Histogram';
 
 const drawerWidth = 240;
 
@@ -197,6 +198,7 @@ export default function Home() {
               <NewChartWizard path='new-chart' />
               <BarChartView path='bar-chart' />
               <ScatterPlot path='scatter-plot' />
+              <Histogram path='histogram' />
             </Router>
           </BarChartProvider>
         </main>
