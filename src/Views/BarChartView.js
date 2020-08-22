@@ -1,45 +1,45 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import Divider from "@material-ui/core/Divider";
-import { withStyles } from "@material-ui/core/styles";
-import { BarChartContext } from "../Contexts/BarChartContext";
-import BarChart from "../Components/BarChart";
-import DeleteButton from "../Components/DeleteButton";
-import AddButton from "../Components/AddButton";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import { BarChartContext } from '../Contexts/BarChartContext';
+import BarChart from '../Components/BarChart';
+import DeleteButton from '../Components/DeleteButton';
+import AddButton from '../Components/AddButton';
 
 const styles = (theme) => ({
   container: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
     },
-    alignContent: "center",
+    alignContent: 'center',
   },
   section: {
-    display: "flex",
-    width: "100%",
+    display: 'flex',
+    width: '100%',
     marginTop: theme.spacing(2),
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   paper: {
     padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
     // flexGrow: 1,
   },
   sideBar: {
-    position: "relative",
-    [theme.breakpoints.up("md")]: {
-      position: "relative",
+    position: 'relative',
+    [theme.breakpoints.up('md')]: {
+      position: 'relative',
       right: 0,
-      height: "100vh",
+      height: '100vh',
     },
-    height: "100%",
+    height: '100%',
     paddingTop: theme.spacing(4),
     paddingRight: theme.spacing(2),
     paddingBottom: theme.spacing(4),
@@ -49,10 +49,10 @@ const styles = (theme) => ({
     },
   },
   chartControlForm: {
-    display: "flex",
-    flexDirection: "column",
-    justifyItems: "space-around",
-    "& div": {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyItems: 'space-around',
+    '& div': {
       border: `5px solid transparent`,
     },
   },
@@ -76,7 +76,7 @@ class BarChartView extends React.Component {
     this.state = {
       point: {
         isPointSelected: false,
-        categoryName: "",
+        categoryName: '',
         yValue: 0,
       },
     };
@@ -99,12 +99,12 @@ class BarChartView extends React.Component {
     //   .addEventListener("click", this.chartClickHandler.bind(this));
 
     this.barChartRef.current.container.current.addEventListener(
-      "click",
+      'click',
       this.chartClickHandler
     );
 
     this.barChartRef.current.container.current.addEventListener(
-      "mouseup",
+      'mouseup',
       this.chartDragHandler
     );
     // (e) => {
@@ -163,12 +163,12 @@ class BarChartView extends React.Component {
     //   .getElementById("myBarChart")
     //   .removeEventListener("click", this.chartClickHandler);
     this.barChartRef.current.container.current.removeEventListener(
-      "click",
+      'click',
       this.chartClickHandler
     );
 
     this.barChartRef.current.container.current.removeEventListener(
-      "mouseup",
+      'mouseup',
       this.chartDragHandler
     );
   }
@@ -202,7 +202,7 @@ class BarChartView extends React.Component {
       : this.setState({
           point: {
             isPointSelected: false,
-            categoryName: "",
+            categoryName: '',
             yValue: 0,
           },
         });
@@ -227,7 +227,7 @@ class BarChartView extends React.Component {
   chartNameChange(e) {
     // e.persist();
     const { dispatch } = this.context;
-    dispatch({ type: "CHANGE_CHART_TITLE", text: e.target.value });
+    dispatch({ type: 'CHANGE_CHART_TITLE', text: e.target.value });
     // e.target.value !== ''
     //   ? setBarChartOptions({
     //       ...barChartOptions,
@@ -238,22 +238,22 @@ class BarChartView extends React.Component {
 
   yAxisTitleChange(e) {
     const { dispatch } = this.context;
-    dispatch({ type: "CHANGE_Y_TITLE", newYTitle: e.target.value });
+    dispatch({ type: 'CHANGE_Y_TITLE', newYTitle: e.target.value });
   }
 
   yAxisRangeChange(e) {
     const { dispatch } = this.context;
 
     switch (e.target.id) {
-      case "chartYMin":
+      case 'chartYMin':
         dispatch({
-          type: "CHANGE_Y_RANGE_MIN",
+          type: 'CHANGE_Y_RANGE_MIN',
           newMin: Number(e.target.value),
         });
         break;
-      case "chartYMax":
+      case 'chartYMax':
         dispatch({
-          type: "CHANGE_Y_RANGE_MAX",
+          type: 'CHANGE_Y_RANGE_MAX',
           newMax: Number(e.target.value),
         });
         break;
@@ -265,7 +265,7 @@ class BarChartView extends React.Component {
   changeYTickHandler(e) {
     const { dispatch } = this.context;
     dispatch({
-      type: "CHANGE_Y_TICK_INTERVAL",
+      type: 'CHANGE_Y_TICK_INTERVAL',
       newTick: Number(e.target.value),
     });
   }
@@ -276,10 +276,10 @@ class BarChartView extends React.Component {
     // const prevState = { ...this.state };
 
     switch (e.target.id) {
-      case "pointCategoryInput":
+      case 'pointCategoryInput':
         e.persist();
         const oldCategory = this.state.point.categoryName;
-        const newCategory = e.target.value === "" ? "" : e.target.value;
+        const newCategory = e.target.value === '' ? '' : e.target.value;
 
         this.setState({
           ...this.state,
@@ -287,13 +287,13 @@ class BarChartView extends React.Component {
         });
 
         dispatch({
-          type: "CHANGE_CATEGORY",
+          type: 'CHANGE_CATEGORY',
           old: oldCategory,
           new: newCategory,
         });
         break;
 
-      case "pointYValueInput":
+      case 'pointYValueInput':
         const oldValue = this.state.point.yValue;
         const newValue = Number(e.target.value);
 
@@ -303,7 +303,7 @@ class BarChartView extends React.Component {
             point: { ...this.state.point, yValue: parseFloat(newValue) },
           },
           () => {
-            dispatch({ type: "CHANGE_Y_VALUE", old: oldValue, new: newValue });
+            dispatch({ type: 'CHANGE_Y_VALUE', old: oldValue, new: newValue });
 
             // this.barChartRef.current.chart.update(barChartOptions, true);
             this.barChartRef.current.chart.series[0].setData(

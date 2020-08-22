@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import Button from "@material-ui/core/Button";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { makeStyles } from "@material-ui/core/styles";
-import { BarChartContext } from "../Contexts/BarChartContext";
+import React, { useContext } from 'react';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from '@material-ui/core/styles';
+import { BarChartContext } from '../Contexts/BarChartContext';
 
 const useStyles = makeStyles((theme) => ({
   deleteButton: {
-    maxWidth: "50%",
-    margin: "auto",
+    maxWidth: '50%',
+    margin: 'auto',
   },
 }));
 
@@ -18,7 +18,7 @@ const DeleteButton = (props) => {
 
   const clickHandle = () => {
     // console.log(props.selectedPoint);
-    dispatch({ type: "DELETE_POINT", selected: props.selected });
+    dispatch({ type: 'DELETE_POINT', selected: props.selected });
 
     //? Do I need to check if dispatch DELETE_POINT was successful
     //? Or is it okay to just always deselect point in BarChartView?

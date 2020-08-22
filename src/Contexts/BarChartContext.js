@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer } from 'react';
 
 export const BarChartContext = createContext();
 
@@ -7,19 +7,19 @@ const barChartReducer = (state, action) => {
   let categories = [...state.xAxis.categories];
 
   switch (action.type) {
-    case "CHANGE_CHART_TITLE":
+    case 'CHANGE_CHART_TITLE':
       // return action.text !== ""
       //   ? { ...state, title: { text: action.text } }
       //   : { ...state, title: { text: "My Chart" } };
       return { ...state, title: { text: action.text } };
-    case "CHANGE_CATEGORY":
+    case 'CHANGE_CATEGORY':
       const catIndex = state.xAxis.categories.indexOf(action.old);
       categories[catIndex] = action.new;
       return {
         ...state,
         xAxis: { categories: categories },
       };
-    case "CHANGE_Y_TITLE":
+    case 'CHANGE_Y_TITLE':
       return {
         ...state,
         yAxis: {
@@ -29,7 +29,7 @@ const barChartReducer = (state, action) => {
           },
         },
       };
-    case "CHANGE_Y_RANGE_MIN":
+    case 'CHANGE_Y_RANGE_MIN':
       return {
         ...state,
         yAxis: {
@@ -41,12 +41,12 @@ const barChartReducer = (state, action) => {
             ...state.series[0],
             dragDrop: {
               ...state.series[0].dragDrop,
-              dragMinY: action.newMin + 1,
+              dragMinY: action.newMin,
             },
           },
         ],
       };
-    case "CHANGE_Y_RANGE_MAX":
+    case 'CHANGE_Y_RANGE_MAX':
       return {
         ...state,
         yAxis: {
@@ -58,12 +58,12 @@ const barChartReducer = (state, action) => {
             ...state.series[0],
             dragDrop: {
               ...state.series[0].dragDrop,
-              dragMaxY: action.newMax - 1,
+              dragMaxY: action.newMax,
             },
           },
         ],
       };
-    case "CHANGE_Y_TICK_INTERVAL":
+    case 'CHANGE_Y_TICK_INTERVAL':
       return {
         ...state,
         yAxis: {
@@ -71,7 +71,7 @@ const barChartReducer = (state, action) => {
           tickInterval: action.newTick,
         },
       };
-    case "CHANGE_Y_VALUE":
+    case 'CHANGE_Y_VALUE':
       const yIndex = state.series[0].data.findIndex(
         (el) => el.y === action.old
       );
@@ -81,7 +81,7 @@ const barChartReducer = (state, action) => {
         series: [{ ...state.series[0], data: points }],
       };
 
-    case "DELETE_POINT":
+    case 'DELETE_POINT':
       const indexOfPoint = state.series[0].data.findIndex(
         (el) => el.y === action.selected.yValue
       );
@@ -97,7 +97,7 @@ const barChartReducer = (state, action) => {
         xAxis: { ...state.xAxis, categories: categories },
       };
 
-    case "ADD_POINT":
+    case 'ADD_POINT':
       points.push(action.newValue);
       categories.push(action.newCategory);
 
@@ -110,7 +110,7 @@ const barChartReducer = (state, action) => {
         xAxis: { ...state.xAxis, categories: categories },
       };
     default:
-      console.log("default");
+      console.log('default');
       return state;
   }
 };
@@ -126,16 +126,16 @@ export const BarChartProvider = (props) => {
     legend: {
       enabled: false,
     },
-    id: "barChartId",
+    id: 'barChartId',
     title: {
-      text: "My Chart",
+      text: 'My Chart',
     },
     xAxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr"],
+      categories: ['Jan', 'Feb', 'Mar', 'Apr'],
     },
     yAxis: {
       title: {
-        text: "Values",
+        text: 'Values',
       },
       min: 0,
       max: 300,
@@ -143,13 +143,13 @@ export const BarChartProvider = (props) => {
     },
     series: [
       {
-        type: "column",
+        type: 'column',
         allowPointSelect: true,
         dragDrop: {
           draggableY: true,
           dragPrecisionY: 0.5,
-          dragMinY: 1,
-          dragMaxY: 299,
+          dragMinY: 0,
+          dragMaxY: 300,
         },
         point: {
           events: {

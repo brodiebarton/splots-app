@@ -1,14 +1,14 @@
-import React, { useContext, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Slider from "@material-ui/core/Slider";
-import { BarChartContext } from "../Contexts/BarChartContext";
+import React, { useContext, useRef } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
+import { BarChartContext } from '../Contexts/BarChartContext';
 
 // !! BROKEN DON'T USE !!
 
 const useStyles = makeStyles({
   root: {
-    width: "100%",
+    width: '100%',
   },
 });
 
@@ -25,7 +25,7 @@ const RangeSlider = ({ sliderId, label, values }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
 
-    dispatch({ type: "CHANGE_Y_RANGE", min: newValue[0], max: newValue[1] });
+    dispatch({ type: 'CHANGE_Y_RANGE', min: newValue[0], max: newValue[1] });
   };
 
   return (
