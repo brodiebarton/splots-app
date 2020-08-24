@@ -195,7 +195,7 @@ export default function Home() {
             <Router>
               <Dashboard path='/' />
               <Dashboard path='dashboard' />
-              <NewChartWizard path='new-chart' />
+              <NewChartWizard path='new-chart/:chartType' />
               <BarChartView path='bar-chart' />
               <ScatterPlot path='scatter-plot' />
               <Histogram path='histogram' />

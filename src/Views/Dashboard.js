@@ -32,7 +32,7 @@ export default function Dashboard() {
   return (
     <Grid className={classes.chartTypeContainer} container spacing={2}>
       <Grid item>
-        <Link to='/bar-chart' className={classes.linkStyle}>
+        <Link to='/new-chart/bar' className={classes.linkStyle}>
           <Paper className={classes.paper}>
             <img
               src='https://via.placeholder.com/300'
@@ -43,7 +43,7 @@ export default function Dashboard() {
       </Grid>
 
       <Grid item>
-        <Link to='/scatter-plot' className={classes.linkStyle}>
+        <Link to='/new-chart/scatter' className={classes.linkStyle}>
           <Paper className={classes.paper}>
             <img src='https://via.placeholder.com/300' alt='placeholder-img' />
             <h2>Scatter Plot</h2>
@@ -52,7 +52,7 @@ export default function Dashboard() {
       </Grid>
 
       <Grid item>
-        <Link to='/histogram' className={classes.linkStyle}>
+        <Link to='/new-chart/histogram' className={classes.linkStyle}>
           <Paper className={classes.paper}>
             <img src='https://via.placeholder.com/300' alt='placeholder-img' />
             <h2>Histogram</h2>
