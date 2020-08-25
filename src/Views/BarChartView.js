@@ -413,16 +413,6 @@ class BarChartView extends React.Component {
                         selected={this.state.point}
                         selectedHandler={this.selectedStateHandler.bind(this)}
                       />
-
-                      {/* <TextField
-													id='pointYValueInput'
-													label='Value'
-													value={parseFloat(this.state.point.yValue)}
-													type='number'
-													step={1}
-													variant='outlined'
-													onChange={this.chartPointChange}
-												/> */}
                     </div>
                   </>
                 ) : (
