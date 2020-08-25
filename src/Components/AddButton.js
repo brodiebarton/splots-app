@@ -18,7 +18,7 @@ const AddButton = () => {
   const { dispatch } = useContext(BarChartContext);
 
   const clickHandle = () => {
-    dispatch({ type: 'ADD_POINT', newValue: 10, newCategory: 'New Category' });
+    dispatch({ type: 'ADD_POINT', newValue: 1, newCategory: 'New Category' });
   };
 
   return (
