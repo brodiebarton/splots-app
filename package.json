@@ -23,7 +23,18 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-duplicate-imports": "warn",
+      "quotes": [
+        "warn",
+        "single"
+      ],
+      "semi": [
+        "warn",
+        "always"
+      ]
+    }
   },
   "browserslist": {
     "production": [

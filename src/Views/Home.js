@@ -16,7 +16,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { mainListItems } from '../Components/ListItems';
 import { Router } from '@reach/router';
 import Dashboard from '../Views/Dashboard';
-import NewChartWizard from '../Views/NewChartWizard';
 import BarChartView from '../Views/BarChartView';
 import ScatterPlot from '../Components/ScatterPlot';
 import { BarChartProvider } from '../Contexts/BarChartContext';
@@ -195,7 +194,6 @@ export default function Home() {
             <Router>
               <Dashboard path='/' />
               <Dashboard path='dashboard' />
-              <NewChartWizard path='new-chart' />
               <BarChartView path='bar-chart' />
               <ScatterPlot path='scatter-plot' />
               <Histogram path='histogram' />

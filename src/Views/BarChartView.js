@@ -349,6 +349,7 @@ class BarChartView extends React.Component {
                 <div className={classes.section}>
                   <TextField
                     id='chartName'
+                    type='text'
                     label='Chart Name'
                     placeholder='Enter Chart Name'
                     variant='outlined'
@@ -357,8 +358,9 @@ class BarChartView extends React.Component {
                   />
                   <TextField
                     id='yAxisTitle'
-                    label='Y Axis Title'
-                    placeholder='Enter Y Axis Title'
+                    type='text'
+                    label='Y-Axis Title'
+                    placeholder='Enter Y-Axis Title'
                     variant='outlined'
                     value={barChartOptions.yAxis.title.text}
                     onChange={this.yAxisTitleChange}
@@ -366,30 +368,30 @@ class BarChartView extends React.Component {
                   <div>
                     <TextField
                       id='chartYMin'
-                      label='Y Axis Min'
-                      placeholder='Enter Chart Name'
-                      variant='outlined'
                       type='number'
-                      value={barChartOptions.yAxis.min}
+                      label='Y-Axis Min'
+                      placeholder='Enter Y-Axis Min'
+                      variant='outlined'
+                      value={barChartOptions.yAxis.min || ''}
                       onChange={this.yAxisRangeChange}
                     />
                     <TextField
                       id='chartYMax'
-                      label='Y Axis Max'
-                      placeholder='Enter Y Axis Max'
-                      variant='outlined'
                       type='number'
-                      value={barChartOptions.yAxis.max}
+                      label='Y-Axis Max'
+                      placeholder='Enter Y-Axis Max'
+                      variant='outlined'
+                      value={barChartOptions.yAxis.max || ''}
                       onChange={this.yAxisRangeChange}
                     />
                   </div>
                   <TextField
                     id='chartYInterval'
-                    label='Y Axis Interval'
-                    placeholder='Enter Y Axis Interval'
-                    variant='outlined'
                     type='number'
-                    value={barChartOptions.yAxis.tickInterval}
+                    label='Y-Axis Interval'
+                    placeholder='Enter Y-Axis Interval'
+                    variant='outlined'
+                    value={barChartOptions.yAxis.tickInterval || ''}
                     onChange={this.changeYTickHandler}
                   />
                   <AddButton />
@@ -400,8 +402,10 @@ class BarChartView extends React.Component {
                     <div className={classes.section}>
                       <TextField
                         id='pointCategoryInput'
+                        type='text'
                         label='Category'
-                        value={this.state.point.categoryName}
+                        placeholder='Enter Category Name'
+                        value={this.state.point.categoryName || ''}
                         variant='outlined'
                         onChange={this.chartPointChange}
                       />
@@ -409,16 +413,6 @@ class BarChartView extends React.Component {
                         selected={this.state.point}
                         selectedHandler={this.selectedStateHandler.bind(this)}
                       />
-
-                      {/* <TextField
-													id='pointYValueInput'
-													label='Value'
-													value={parseFloat(this.state.point.yValue)}
-													type='number'
-													step={1}
-													variant='outlined'
-													onChange={this.chartPointChange}
-												/> */}
                     </div>
                   </>
                 ) : (

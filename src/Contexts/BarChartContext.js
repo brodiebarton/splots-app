@@ -131,15 +131,16 @@ export const BarChartProvider = (props) => {
       text: 'My Chart',
     },
     xAxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr'],
+      categories: [],
+      // categories: ['Jan', 'Feb', 'Mar', 'Apr'],
     },
     yAxis: {
       title: {
         text: 'Values',
       },
       min: 0,
-      max: 300,
-      tickInterval: 10,
+      max: 10,
+      tickInterval: 1,
     },
     series: [
       {
@@ -149,7 +150,7 @@ export const BarChartProvider = (props) => {
           draggableY: true,
           dragPrecisionY: 0.5,
           dragMinY: 0,
-          dragMaxY: 300,
+          dragMaxY: 10,
         },
         point: {
           events: {
@@ -163,10 +164,10 @@ export const BarChartProvider = (props) => {
           },
         },
         data: [
-          { selected: false, y: 30 },
-          { selected: false, y: 70 },
-          { selected: false, y: 100 },
-          { selected: false, y: 200 },
+          // { selected: false, y: 30 },
+          // { selected: false, y: 70 },
+          // { selected: false, y: 100 },
+          // { selected: false, y: 200 },
         ],
       },
     ],
