@@ -4,11 +4,12 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
-import { BarChartContext } from '../Contexts/BarChartContext';
+import { ChartContext } from '../Contexts/ChartContext';
 import BarChart from '../Components/BarChart';
 import DeleteButton from '../Components/DeleteButton';
 import AddButton from '../Components/AddButton';
 
+// ? Extract styles to external file?
 const styles = (theme) => ({
   container: {
     display: 'flex',
@@ -58,8 +59,9 @@ const styles = (theme) => ({
   },
 });
 
+// ? Convert to Functional Component ?
 class BarChartView extends React.Component {
-  static contextType = BarChartContext;
+  static contextType = ChartContext;
   constructor(props) {
     super(props);
 
@@ -90,14 +92,6 @@ class BarChartView extends React.Component {
   }
 
   componentDidMount() {
-    // this.barChart = Highcharts.chart(
-    //   document.getElementById("myBarChart"),
-    //   this.state.options
-    // );
-    // this.chartClickListener = document
-    //   .getElementById("myBarChart")
-    //   .addEventListener("click", this.chartClickHandler.bind(this));
-
     this.barChartRef.current.container.current.addEventListener(
       'click',
       this.chartClickHandler
@@ -107,61 +101,11 @@ class BarChartView extends React.Component {
       'mouseup',
       this.chartDragHandler
     );
-    // (e) => {
-    //   const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
-    //   if (selectedPoint.length !== 0) {
-    //     this.setState({
-    //       point: {
-    //         isPointSelected: selectedPoint[0].options.selected,
-    //         categoryName: selectedPoint[0].category,
-    //         yValue: selectedPoint[0].y,
-    //       },
-    //     });
-    //   }
-    // }
-    // console.log(this.barChartRef.current.chart.options.series[0].point.events);
-
-    // this.barChartRef.current.chart.addEvent(
-    //   this.barChartRef.current.chart,
-    //   "drop",
-    //   (e) => {
-    //     console.log("drag event test");
-    //   }
-    // );
   }
 
-  //   shouldComponentUpdate(nextProps, nextState) {
-  //     console.log("shouldComponentUpdate");
-  //     if (nextState !== this.state) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-
-  //   componentWillUpdate(nextProps, nextState) {
-  //     console.log("componentWillUpdate");
-  //     const { barChartOptions } = this.context;
-  //     this.barChartRef.current.chart.series[0].setData(
-  //       barChartOptions.series[0].data,
-  //       true
-  //     );
-  //     this.barChartRef.current.chart.update(barChartOptions, true);
-  //   }
-
-  componentDidUpdate() {
-    // console.log("componentDidUpdate");
-    // this.barChart.update(this.state.options);
-    // console.log(this.barChartRef.current.chart.getSelectedPoints());
-    // console.log(
-    //   this.barChartRef.current.chart.options.plotOptions.column.point.events
-    // );
-  }
+  componentDidUpdate() {}
 
   componentWillUnmount() {
-    // document
-    //   .getElementById("myBarChart")
-    //   .removeEventListener("click", this.chartClickHandler);
     this.barChartRef.current.container.current.removeEventListener(
       'click',
       this.chartClickHandler
@@ -174,18 +118,16 @@ class BarChartView extends React.Component {
   }
 
   chartClickHandler(e) {
-    const { barChartOptions } = this.context;
+    const { chartOptions } = this.context;
 
     let selectedPoint = [];
 
-    if (barChartOptions.xAxis.categories.includes(e.target.innerHTML)) {
-      const index = barChartOptions.xAxis.categories.indexOf(
-        e.target.innerHTML
-      );
+    if (chartOptions.xAxis.categories.includes(e.target.innerHTML)) {
+      const index = chartOptions.xAxis.categories.indexOf(e.target.innerHTML);
       selectedPoint.push({
         selected: true,
-        category: barChartOptions.xAxis.categories[index],
-        yValue: barChartOptions.series[0].data[index],
+        category: chartOptions.xAxis.categories[index],
+        yValue: chartOptions.series[0].data[index],
       });
     } else {
       selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
@@ -206,8 +148,6 @@ class BarChartView extends React.Component {
             yValue: 0,
           },
         });
-    // console.log(this.barChartRef.current.chart);
-    // console.log(e);
   }
 
   chartDragHandler(e) {
@@ -225,15 +165,8 @@ class BarChartView extends React.Component {
   }
 
   chartNameChange(e) {
-    // e.persist();
     const { dispatch } = this.context;
     dispatch({ type: 'CHANGE_CHART_TITLE', text: e.target.value });
-    // e.target.value !== ''
-    //   ? setBarChartOptions({
-    //       ...barChartOptions,
-    //       title: { text: e.target.value },
-    //     })
-    //   : setBarChartOptions({ ...barChartOptions, title: { text: 'My Chart' } });
   }
 
   yAxisTitleChange(e) {
@@ -271,9 +204,7 @@ class BarChartView extends React.Component {
   }
 
   chartPointChange(e) {
-    const { barChartOptions, dispatch } = this.context;
-
-    // const prevState = { ...this.state };
+    const { chartOptions, dispatch } = this.context;
 
     switch (e.target.id) {
       case 'pointCategoryInput':
@@ -305,9 +236,8 @@ class BarChartView extends React.Component {
           () => {
             dispatch({ type: 'CHANGE_Y_VALUE', old: oldValue, new: newValue });
 
-            // this.barChartRef.current.chart.update(barChartOptions, true);
             this.barChartRef.current.chart.series[0].setData(
-              barChartOptions.series[0].data,
+              chartOptions.series[0].data,
               true
             );
           }
@@ -318,24 +248,18 @@ class BarChartView extends React.Component {
       default:
         break;
     }
-
-    // Update and Redraw Chart
-    // this.barChartRef.current.chart.update(barChartOptions, true);
   }
 
   render() {
     const { classes } = this.props;
     const isPointSelected = this.state.point.isPointSelected;
-    const { barChartOptions, dispatch } = this.context;
-    // console.log(barChartOptions.title.text);
+    const { chartOptions, dispatch } = this.context;
+    // console.log(chartOptions.title.text);
     return (
       <>
         <Grid className={classes.container}>
-          {/* Chart */}
-          {/* <Paper className={classes.paper}>
-            <div id="myBarChart" className={classes.myBarChart}></div>
-          </Paper> */}
           <BarChart ref={this.barChartRef} />
+          {/* // TODO - Extract Sidebar as Chart Control Component */}
           <Paper className={classes.sideBar}>
             <form
               className={classes.chartControlForm}
@@ -353,7 +277,7 @@ class BarChartView extends React.Component {
                     label='Chart Name'
                     placeholder='Enter Chart Name'
                     variant='outlined'
-                    value={barChartOptions.title.text}
+                    value={chartOptions.title.text}
                     onChange={this.chartNameChange}
                   />
                   <TextField
@@ -362,7 +286,7 @@ class BarChartView extends React.Component {
                     label='Y-Axis Title'
                     placeholder='Enter Y-Axis Title'
                     variant='outlined'
-                    value={barChartOptions.yAxis.title.text}
+                    value={chartOptions.yAxis.title.text}
                     onChange={this.yAxisTitleChange}
                   />
                   <div>
@@ -372,7 +296,7 @@ class BarChartView extends React.Component {
                       label='Y-Axis Min'
                       placeholder='Enter Y-Axis Min'
                       variant='outlined'
-                      value={barChartOptions.yAxis.min || ''}
+                      value={chartOptions.yAxis.min || ''}
                       onChange={this.yAxisRangeChange}
                     />
                     <TextField
@@ -381,7 +305,7 @@ class BarChartView extends React.Component {
                       label='Y-Axis Max'
                       placeholder='Enter Y-Axis Max'
                       variant='outlined'
-                      value={barChartOptions.yAxis.max || ''}
+                      value={chartOptions.yAxis.max || ''}
                       onChange={this.yAxisRangeChange}
                     />
                   </div>
@@ -391,7 +315,7 @@ class BarChartView extends React.Component {
                     label='Y-Axis Interval'
                     placeholder='Enter Y-Axis Interval'
                     variant='outlined'
-                    value={barChartOptions.yAxis.tickInterval || ''}
+                    value={chartOptions.yAxis.tickInterval || ''}
                     onChange={this.changeYTickHandler}
                   />
                   <AddButton />

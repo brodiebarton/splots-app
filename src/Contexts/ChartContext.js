@@ -1,8 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 
-export const BarChartContext = createContext();
+export const ChartContext = createContext();
 
-const barChartReducer = (state, action) => {
+const chartReducer = (state, action) => {
   let points = [...state.series[0].data];
   let categories = [...state.xAxis.categories];
 
@@ -115,8 +115,8 @@ const barChartReducer = (state, action) => {
   }
 };
 
-export const BarChartProvider = (props) => {
-  const [barChartOptions, dispatch] = useReducer(barChartReducer, {
+export const ChartProvider = (props) => {
+  const [chartOptions, dispatch] = useReducer(chartReducer, {
     credits: {
       enabled: false,
     },
@@ -126,7 +126,7 @@ export const BarChartProvider = (props) => {
     legend: {
       enabled: false,
     },
-    id: 'barChartId',
+    id: 'chart_id',
     title: {
       text: 'My Chart',
     },
@@ -148,7 +148,7 @@ export const BarChartProvider = (props) => {
         allowPointSelect: true,
         dragDrop: {
           draggableY: true,
-          dragPrecisionY: 0.5,
+          // dragPrecisionY: 0.5,
           dragMinY: 0,
           dragMaxY: 10,
         },
@@ -174,8 +174,8 @@ export const BarChartProvider = (props) => {
   });
 
   return (
-    <BarChartContext.Provider value={{ barChartOptions, dispatch }}>
+    <ChartContext.Provider value={{ chartOptions: chartOptions, dispatch }}>
       {props.children}
-    </BarChartContext.Provider>
+    </ChartContext.Provider>
   );
 };

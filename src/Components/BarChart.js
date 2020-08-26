@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { BarChartContext } from '../Contexts/BarChartContext';
+import { ChartContext } from '../Contexts/ChartContext';
 import draggable from 'highcharts/modules/draggable-points';
 
 // init Highcharts modules
@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
     width: '100%',
-    // flexGrow: 1,
   },
   myBarChart: {
     width: '100%',
@@ -31,22 +30,22 @@ const useStyles = makeStyles((theme) => ({
 
 const BarChart = React.forwardRef((props, ref) => {
   const classes = useStyles();
-  const { barChartOptions } = useContext(BarChartContext);
+  const { chartOptions } = useContext(ChartContext);
 
   useEffect(() => {
     ref.current.chart.series[0].setData(
-      barChartOptions.series[0].data,
+      chartOptions.series[0].data,
       true,
       true
     );
-  }, [props, ref, barChartOptions]);
+  }, [props, ref, chartOptions]);
 
   return (
     <div id='myBarChart' className={classes.myBarChart}>
       <Paper className={classes.paper}>
         <HighchartsReact
           highcharts={Highcharts}
-          options={barChartOptions}
+          options={chartOptions}
           ref={ref}
         />
       </Paper>

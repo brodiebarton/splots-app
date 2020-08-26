@@ -18,7 +18,7 @@ import { Router } from '@reach/router';
 import Dashboard from '../Views/Dashboard';
 import BarChartView from '../Views/BarChartView';
 import ScatterPlot from '../Components/ScatterPlot';
-import { BarChartProvider } from '../Contexts/BarChartContext';
+import { ChartProvider } from '../Contexts/ChartContext';
 import Histogram from '../Components/Histogram';
 
 const drawerWidth = 240;
@@ -190,7 +190,7 @@ export default function Home() {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <BarChartProvider>
+          <ChartProvider>
             <Router>
               <Dashboard path='/' />
               <Dashboard path='dashboard' />
@@ -198,7 +198,7 @@ export default function Home() {
               <ScatterPlot path='scatter-plot' />
               <Histogram path='histogram' />
             </Router>
-          </BarChartProvider>
+          </ChartProvider>
         </main>
       </div>
     </>

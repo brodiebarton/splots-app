@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
-import { BarChartContext } from '../Contexts/BarChartContext';
+import { ChartContext } from '../Contexts/ChartContext';
 
 // !! BROKEN DON'T USE !!
 
@@ -20,7 +20,7 @@ const RangeSlider = ({ sliderId, label, values }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(values);
 
-  const { barChartOptions, dispatch } = useContext(BarChartContext);
+  const { chartOptions, dispatch } = useContext(ChartContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
