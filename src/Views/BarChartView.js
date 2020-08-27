@@ -1,13 +1,14 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Divider from '@material-ui/core/Divider';
+// import Paper from '@material-ui/core/Paper';
+// import TextField from '@material-ui/core/TextField';
+// import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 import { ChartContext } from '../Contexts/ChartContext';
 import BarChart from '../Components/BarChart';
-import DeleteButton from '../Components/DeleteButton';
-import AddButton from '../Components/AddButton';
+// import DeleteButton from '../Components/DeleteButton';
+// import AddButton from '../Components/AddButton';
+import ChartControls from '../Components/ChartControls';
 
 // ? Extract styles to external file?
 const styles = (theme) => ({
@@ -74,6 +75,7 @@ class BarChartView extends React.Component {
     this.yAxisRangeChange = this.yAxisRangeChange.bind(this);
     this.chartDragHandler = this.chartDragHandler.bind(this);
     this.changeYTickHandler = this.changeYTickHandler.bind(this);
+    this.selectedStateHandler = this.selectedStateHandler.bind(this);
 
     this.state = {
       point: {
@@ -259,8 +261,23 @@ class BarChartView extends React.Component {
       <>
         <Grid className={classes.container}>
           <BarChart ref={this.barChartRef} />
-          {/* // TODO - Extract Sidebar as Chart Control Component */}
-          <Paper className={classes.sideBar}>
+          {/* // TODO - Extract to Chart Control Component */}
+          <ChartControls
+            chartOptions={chartOptions}
+            isSelected={isPointSelected}
+            pointState={this.state}
+            handlers={{
+              chartClickHandler: this.chartClickHandler,
+              chartNameChange: this.chartNameChange,
+              chartPointChange: this.chartPointChange,
+              yAxisTitleChange: this.yAxisTitleChange,
+              yAxisRangeChange: this.yAxisRangeChange,
+              chartDragHandler: this.chartDragHandler,
+              changeYTickHandler: this.changeYTickHandler,
+              selectedStateHandler: this.selectedStateHandler,
+            }}
+          />
+          {/* <Paper className={classes.sideBar}>
             <form
               className={classes.chartControlForm}
               onSubmit={(e) => {
@@ -335,7 +352,7 @@ class BarChartView extends React.Component {
                       />
                       <DeleteButton
                         selected={this.state.point}
-                        selectedHandler={this.selectedStateHandler.bind(this)}
+                        selectedHandler={this.selectedStateHandler}
                       />
                     </div>
                   </>
@@ -344,7 +361,7 @@ class BarChartView extends React.Component {
                 )}
               </section>
             </form>
-          </Paper>
+          </Paper> */}
         </Grid>
       </>
     );
