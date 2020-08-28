@@ -197,10 +197,12 @@ class BarChartView extends React.Component {
 
   changeYTickHandler(e) {
     const { dispatch } = this.context;
-    dispatch({
-      type: 'CHANGE_Y_TICK_INTERVAL',
-      newTick: Number(e.target.value),
-    });
+    if (!isNaN(Number(e.target.value)) && Number(e.target.value) > 0) {
+      dispatch({
+        type: 'CHANGE_Y_TICK_INTERVAL',
+        newTick: Number(e.target.value),
+      });
+    }
   }
 
   chartPointChange(e) {
