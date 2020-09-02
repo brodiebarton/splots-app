@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useLayoutEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { ChartContext } from '../Contexts/ChartContext';
+import { BarChartContext } from '../Contexts/BarChartContext';
 import draggable from 'highcharts/modules/draggable-points';
+import { useRef } from 'react';
 
 // init Highcharts modules
 draggable(Highcharts);
@@ -28,29 +29,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BarChart = React.forwardRef((props, ref) => {
+// const BarChart = React.forwardRef((props, ref) => {
+const BarChart = ({ options }) => {
   const classes = useStyles();
-  const { chartOptions } = useContext(ChartContext);
-
-  useEffect(() => {
-    ref.current.chart.series[0].setData(
-      chartOptions.series[0].data,
-      true,
-      true
-    );
-  }, [props, ref, chartOptions]);
+  const { barChartOptions } = useContext(BarChartContext);
+  // const { barChartOptions } = useContext(BarChartContext);
+  // useEffect(() => {
+  //   ref.current.chart.series[0].setData(
+  //     barChartOptions.series[0].data,
+  //     true,
+  //     true
+  //   );
+  // }, [props, ref, barChartOptions]);
 
   return (
-    <div id='myBarChart' className={classes.myBarChart}>
-      <Paper className={classes.paper}>
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={chartOptions}
-          ref={ref}
-        />
-      </Paper>
-    </div>
+    // <div id='myBarChart' className={classes.myBarChart}>
+    <Paper className={classes.paper}>
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={barChartOptions}
+        allowChartUpdate={true}
+        oneToOne={true}
+      />
+    </Paper>
+    // </div>
   );
-});
+};
 
 export default BarChart;

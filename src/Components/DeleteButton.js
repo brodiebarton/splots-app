@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
-import { ChartContext } from '../Contexts/ChartContext';
+import { BarChartContext } from '../Contexts/BarChartContext';
 
 const useStyles = makeStyles((theme) => ({
   deleteButton: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 const DeleteButton = (props) => {
   const classes = useStyles();
 
-  const { dispatch } = useContext(ChartContext);
+  const { dispatch } = useContext(BarChartContext);
 
   const clickHandle = () => {
     // console.log(props.selectedPoint);

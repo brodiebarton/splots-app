@@ -1,8 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 
-export const ChartContext = createContext();
+export const BarChartContext = createContext();
 
-const chartReducer = (state, action) => {
+const BarChartReducer = (state, action) => {
   let points = [...state.series[0].data];
   let categories = [...state.xAxis.categories];
 
@@ -98,7 +98,7 @@ const chartReducer = (state, action) => {
       };
 
     case 'ADD_POINT':
-      points.push(action.newValue);
+      points.push(action.newPoint);
       categories.push(action.newCategory);
 
       return {
@@ -115,8 +115,8 @@ const chartReducer = (state, action) => {
   }
 };
 
-export const ChartProvider = (props) => {
-  const [chartOptions, dispatch] = useReducer(chartReducer, {
+export const BarChartProvider = (props) => {
+  const [barChartOptions, dispatch] = useReducer(BarChartReducer, {
     credits: {
       enabled: false,
     },
@@ -164,7 +164,7 @@ export const ChartProvider = (props) => {
           },
         },
         data: [
-          // { selected: false, y: 30 },
+          // { selected: false, y: 3 },
           // { selected: false, y: 70 },
           // { selected: false, y: 100 },
           // { selected: false, y: 200 },
@@ -174,8 +174,9 @@ export const ChartProvider = (props) => {
   });
 
   return (
-    <ChartContext.Provider value={{ chartOptions: chartOptions, dispatch }}>
+    <BarChartContext.Provider
+      value={{ barChartOptions: barChartOptions, dispatch }}>
       {props.children}
-    </ChartContext.Provider>
+    </BarChartContext.Provider>
   );
 };
