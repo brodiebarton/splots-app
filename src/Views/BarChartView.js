@@ -74,10 +74,6 @@ const BarChartView = () => {
   const { barChartOptions, dispatch } = useContext(BarChartContext);
   const [viewState, setViewState] = useState(initialViewState);
 
-  useEffect(() => {
-    console.log('useEffect Called');
-  }, [barChartOptions]);
-
   const chartClickHandler = (e) => {
     let selectedPoint = [];
 
@@ -226,7 +222,7 @@ const BarChartView = () => {
     <>
       {/* <BarChartProvider> */}
       <Grid className={classes.container}>
-        <BarChart options={barChartOptions} />
+        <BarChart />
         <Paper className={classes.sideBar}>
           <form
             className={classes.chartControlForm}

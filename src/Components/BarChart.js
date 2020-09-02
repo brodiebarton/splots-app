@@ -30,9 +30,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // const BarChart = React.forwardRef((props, ref) => {
-const BarChart = ({ options }) => {
+const BarChart = () => {
   const classes = useStyles();
   const { barChartOptions } = useContext(BarChartContext);
+  // const [options, setOptions] = useState(barChartOptions);
+  const chart = useRef();
+
+  useLayoutEffect(() => {
+    chart.current.series[0].setData(barChartOptions.series[0].data, true, true);
+  }, [barChartOptions]);
+
   // const { barChartOptions } = useContext(BarChartContext);
   // useEffect(() => {
   //   ref.current.chart.series[0].setData(
@@ -48,8 +55,11 @@ const BarChart = ({ options }) => {
       <HighchartsReact
         highcharts={Highcharts}
         options={barChartOptions}
-        allowChartUpdate={true}
-        oneToOne={true}
+        // allowChartUpdate={true}
+        // updateArgs={[true, true, true]}
+        callback={(chartRef) => {
+          chart.current = chartRef;
+        }}
       />
     </Paper>
     // </div>
