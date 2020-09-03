@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
-import { BarChartProvider } from './Contexts/BarChartContext';
+// import { BarChartProvider } from './Contexts/BarChartContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BarChartProvider>
-      <App />
-    </BarChartProvider>
+    {/* <BarChartProvider> */}
+    <App />
+    {/* </BarChartProvider> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

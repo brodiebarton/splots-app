@@ -3,7 +3,7 @@ import React, { createContext, useReducer } from 'react';
 export const BarChartContext = createContext();
 
 const BarChartReducer = (state, action) => {
-  let points = [...state.series[0].data];
+  let points = [...state.series.data];
   let categories = [...state.xAxis.categories];
 
   switch (action.type) {
@@ -36,11 +36,11 @@ const BarChartReducer = (state, action) => {
           ...state.yAxis,
           min: action.newMin,
         },
-        series: [
+        chart: [
           {
-            ...state.series[0],
+            ...state.chart,
             dragDrop: {
-              ...state.series[0].dragDrop,
+              ...state.chart.dragDrop,
               dragMinY: action.newMin,
             },
           },
@@ -53,11 +53,11 @@ const BarChartReducer = (state, action) => {
           ...state.yAxis,
           max: action.newMax,
         },
-        series: [
+        chart: [
           {
-            ...state.series[0],
+            ...state.chart,
             dragDrop: {
-              ...state.series[0].dragDrop,
+              ...state.chart.dragDrop,
               dragMaxY: action.newMax,
             },
           },
@@ -72,17 +72,15 @@ const BarChartReducer = (state, action) => {
         },
       };
     case 'CHANGE_Y_VALUE':
-      const yIndex = state.series[0].data.findIndex(
-        (el) => el.y === action.old
-      );
+      const yIndex = state.series.data.findIndex((el) => el.y === action.old);
       points[yIndex].y = parseFloat(action.new);
       return {
         ...state,
-        series: [{ ...state.series[0], data: points }],
+        series: [{ ...state.series, data: points }],
       };
 
     case 'DELETE_POINT':
-      const indexOfPoint = state.series[0].data.findIndex(
+      const indexOfPoint = state.series.data.findIndex(
         (el) => el.y === action.selected.yValue
       );
       points.splice(indexOfPoint, 1);
@@ -92,7 +90,7 @@ const BarChartReducer = (state, action) => {
         ...state,
         series: {
           ...state.series,
-          0: { ...state.series[0], data: points },
+          data: points,
         },
         xAxis: { ...state.xAxis, categories: categories },
       };
@@ -105,7 +103,7 @@ const BarChartReducer = (state, action) => {
         ...state,
         series: {
           ...state.series,
-          0: { ...state.series[0], data: points },
+          data: points,
         },
         xAxis: { ...state.xAxis, categories: categories },
       };
@@ -117,6 +115,9 @@ const BarChartReducer = (state, action) => {
 
 export const BarChartProvider = (props) => {
   const [barChartOptions, dispatch] = useReducer(BarChartReducer, {
+    chart: {
+      type: 'column',
+    },
     credits: {
       enabled: false,
     },
@@ -130,6 +131,33 @@ export const BarChartProvider = (props) => {
     title: {
       text: 'My Chart',
     },
+    plotOptions: {
+      column: {
+        allowPointSelect: true,
+        dragDrop: {
+          draggableY: true,
+          // dragPrecisionY: 0.5,
+          dragMinY: 0,
+          dragMaxY: 10,
+        },
+        point: {
+          events: {
+            // click: (e) => {
+            //   console.log('click', e);
+            // },
+            drop: (e) => {
+              console.log('drop', e);
+            },
+            select: (e) => {
+              console.log('select', e);
+            },
+            unselect: (e) => {
+              console.log('unselect', e);
+            },
+          },
+        },
+      },
+    },
     xAxis: {
       categories: [],
       // categories: ['Jan', 'Feb', 'Mar', 'Apr'],
@@ -142,35 +170,15 @@ export const BarChartProvider = (props) => {
       max: 10,
       tickInterval: 1,
     },
-    series: [
-      {
-        type: 'column',
-        allowPointSelect: true,
-        dragDrop: {
-          draggableY: true,
-          // dragPrecisionY: 0.5,
-          dragMinY: 0,
-          dragMaxY: 10,
-        },
-        point: {
-          events: {
-            // dragStart: function (e) {
-            // },
-            // drag: function (e) {
-            //   console.log("dragging...");
-            // },
-            // drop: function (e) {
-            // },
-          },
-        },
-        data: [
-          // { selected: false, y: 3 },
-          // { selected: false, y: 70 },
-          // { selected: false, y: 100 },
-          // { selected: false, y: 200 },
-        ],
-      },
-    ],
+    series: {
+      name: 'BarChartData',
+      data: [
+        // { selected: false, y: 1 },
+        // { selected: false, y: 2 },
+        // { selected: false, y: 3 },
+        // { selected: false, y: 4 },
+      ],
+    },
   });
 
   return (

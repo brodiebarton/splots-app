@@ -12,26 +12,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddButton = () => {
+const AddButton = ({ clickHandler }) => {
   const classes = useStyles();
 
-  const { dispatch } = useContext(BarChartContext);
+  // const { dispatch } = useContext(BarChartContext);
 
-  const clickHandle = () => {
-    dispatch({
-      type: 'ADD_POINT',
-      newPoint: {
-        selected: false,
-        y: 1,
-      },
-      newCategory: 'New Category',
-    });
-  };
+  // const clickHandle = () => {
+  //   dispatch({
+  //     type: 'ADD_POINT',
+  //     newPoint: {
+  //       selected: false,
+  //       y: 1,
+  //     },
+  //     newCategory: 'New Category',
+  //   });
+  // };
 
   return (
     <Button
       className={classes.addButton}
-      onClick={clickHandle}
+      onClick={clickHandler}
       variant='contained'
       color='secondary'
       startIcon={<AddIcon />}>

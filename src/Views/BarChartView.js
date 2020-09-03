@@ -3,12 +3,15 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 // import { BarChartContext } from '../Contexts/BarChartContext';
 import BarChart from '../Components/BarChart';
 import DeleteButton from '../Components/DeleteButton';
 import AddButton from '../Components/AddButton';
-import { BarChartContext } from '../Contexts/BarChartContext';
+import { BarChartProvider, BarChartContext } from '../Contexts/BarChartContext';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 
 // ? Extract styles to external file?
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +75,12 @@ const BarChartView = () => {
   };
 
   const { barChartOptions, dispatch } = useContext(BarChartContext);
+  // const [chartOptions, setChartOptions] = useState(barChartOptions);
   const [viewState, setViewState] = useState(initialViewState);
+
+  // useLayoutEffect(() => {
+  //   setChartOptions(barChartOptions);
+  // }, [barChartOptions]);
 
   const chartClickHandler = (e) => {
     let selectedPoint = [];
@@ -131,17 +139,17 @@ const BarChartView = () => {
   };
 
   const chartNameChange = (e) => {
-    const { dispatch } = this.context;
+    // const { dispatch } = this.context;
     dispatch({ type: 'CHANGE_CHART_TITLE', text: e.target.value });
   };
 
   const yAxisTitleChange = (e) => {
-    const { dispatch } = this.context;
+    // const { dispatch } = this.context;
     dispatch({ type: 'CHANGE_Y_TITLE', newYTitle: e.target.value });
   };
 
   const yAxisRangeChange = (e) => {
-    const { dispatch } = this.context;
+    // const { dispatch } = this.context;
 
     switch (e.target.id) {
       case 'chartYMin':
@@ -162,7 +170,7 @@ const BarChartView = () => {
   };
 
   const changeYTickHandler = (e) => {
-    const { dispatch } = this.context;
+    // const { dispatch } = this.context;
     if (!isNaN(Number(e.target.value)) && Number(e.target.value) > 0) {
       dispatch({
         type: 'CHANGE_Y_TICK_INTERVAL',
@@ -171,13 +179,24 @@ const BarChartView = () => {
     }
   };
 
+  const addButtonClickHandle = () => {
+    dispatch({
+      type: 'ADD_POINT',
+      newPoint: {
+        selected: false,
+        y: 1,
+      },
+      newCategory: 'New Category',
+    });
+  };
+
   const chartPointChange = (e) => {
-    const { chartOptions, dispatch } = this.context;
+    // const { chartOptions, dispatch } = this.context;
 
     switch (e.target.id) {
       case 'pointCategoryInput':
         e.persist();
-        const oldCategory = this.state.point.categoryName;
+        const oldCategory = viewState.point.categoryName;
         const newCategory = e.target.value === '' ? '' : e.target.value;
 
         setViewState({
@@ -193,21 +212,21 @@ const BarChartView = () => {
         break;
 
       case 'pointYValueInput':
-        const oldValue = this.state.point.yValue;
+        const oldValue = viewState.point.yValue;
         const newValue = Number(e.target.value);
 
-        this.setState(
+        setViewState(
           {
-            ...this.state,
-            point: { ...this.state.point, yValue: parseFloat(newValue) },
+            ...viewState,
+            point: { ...viewState.point, yValue: parseFloat(newValue) },
           },
           () => {
             dispatch({ type: 'CHANGE_Y_VALUE', old: oldValue, new: newValue });
 
-            this.barChartRef.current.chart.series[0].setData(
-              chartOptions.series[0].data,
-              true
-            );
+            // this.barChartRef.current.chart.series[0].setData(
+            //   chartOptions.series[0].data,
+            //   true
+            // );
           }
         );
 
@@ -220,9 +239,8 @@ const BarChartView = () => {
 
   return (
     <>
-      {/* <BarChartProvider> */}
       <Grid className={classes.container}>
-        <BarChart />
+        <BarChart chartOptions={barChartOptions} />
         <Paper className={classes.sideBar}>
           <form
             className={classes.chartControlForm}
@@ -281,7 +299,7 @@ const BarChartView = () => {
                   value={barChartOptions.yAxis.tickInterval || ''}
                   onChange={changeYTickHandler}
                 />
-                <AddButton />
+                <AddButton clickHandler={addButtonClickHandle} />
               </div>
               {viewState.point.isPointSelected ? (
                 <>
@@ -309,7 +327,6 @@ const BarChartView = () => {
           </form>
         </Paper>
       </Grid>
-      {/* </BarChartProvider> */}
     </>
   );
 };
