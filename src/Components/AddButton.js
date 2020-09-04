@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
-import { ChartContext } from '../Contexts/ChartContext';
+import { BarChartContext } from '../Contexts/BarChartContext';
 
 const useStyles = makeStyles((theme) => ({
   addButton: {
@@ -12,19 +12,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddButton = () => {
+const AddButton = ({ clickHandler }) => {
   const classes = useStyles();
 
-  const { dispatch } = useContext(ChartContext);
+  // const { dispatch } = useContext(BarChartContext);
 
-  const clickHandle = () => {
-    dispatch({ type: 'ADD_POINT', newValue: 1, newCategory: 'New Category' });
-  };
+  // const clickHandle = () => {
+  //   dispatch({
+  //     type: 'ADD_POINT',
+  //     newPoint: {
+  //       selected: false,
+  //       y: 1,
+  //     },
+  //     newCategory: 'New Category',
+  //   });
+  // };
 
   return (
     <Button
       className={classes.addButton}
-      onClick={clickHandle}
+      onClick={clickHandler}
       variant='contained'
       color='secondary'
       startIcon={<AddIcon />}>

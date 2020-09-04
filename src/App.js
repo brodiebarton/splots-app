@@ -5,6 +5,8 @@ import './App.css';
 import CssBaseLine from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
+import { BarChartProvider } from './Contexts/BarChartContext';
+import { UserStateProvider } from './Contexts/UserContext';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark');
@@ -23,7 +25,11 @@ function App() {
     <div className='App'>
       <ThemeProvider theme={theme}>
         <CssBaseLine />
-        <Home />
+        <UserStateProvider>
+          <BarChartProvider>
+            <Home />
+          </BarChartProvider>
+        </UserStateProvider>
       </ThemeProvider>
     </div>
   );
