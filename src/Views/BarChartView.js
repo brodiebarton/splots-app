@@ -9,7 +9,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import BarChart from '../Components/BarChart';
 import DeleteButton from '../Components/DeleteButton';
 import AddButton from '../Components/AddButton';
-import { BarChartProvider, BarChartContext } from '../Contexts/BarChartContext';
+import {
+  BarChartProvider,
+  BarChartContext,
+  BAR_CHART_ACTIONS,
+} from '../Contexts/BarChartContext';
+import { UserContext, USER_ACTIONS } from '../Contexts/UserContext';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -66,102 +71,96 @@ const useStyles = makeStyles((theme) => ({
 const BarChartView = () => {
   const classes = useStyles();
 
-  const initialViewState = {
-    point: {
-      isPointSelected: false,
-      categoryName: '',
-      yValue: null,
-    },
-  };
+  const { barChartOptions, barChartDispatch } = useContext(BarChartContext);
+  const { userState, userStateDispatch } = useContext(UserContext);
 
-  const { barChartOptions, dispatch } = useContext(BarChartContext);
-  // const [chartOptions, setChartOptions] = useState(barChartOptions);
-  const [viewState, setViewState] = useState(initialViewState);
+  // const chartClickHandler = (e) => {
+  //   let selectedPoint = [];
 
-  // useLayoutEffect(() => {
-  //   setChartOptions(barChartOptions);
-  // }, [barChartOptions]);
+  //   if (barChartOptions.xAxis.categories.includes(e.target.innerHTML)) {
+  //     const index = barChartOptions.xAxis.categories.indexOf(
+  //       e.target.innerHTML
+  //     );
+  //     selectedPoint.push({
+  //       selected: true,
+  //       category: barChartOptions.xAxis.categories[index],
+  //       yValue: barChartOptions.series[0].data[index],
+  //     });
+  //   } else {
+  //     // ? CAN I DO THIS WITHOUT USING REF A LOT ELSEWHERE?
+  //     selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
+  //   }
 
-  const chartClickHandler = (e) => {
-    let selectedPoint = [];
+  //   selectedPoint.length > 0
+  //     ? setViewState({
+  //         point: {
+  //           isPointSelected: selectedPoint[0].selected,
+  //           categoryName: selectedPoint[0].category,
+  //           yValue: selectedPoint[0].y,
+  //         },
+  //       })
+  //     : setViewState({
+  //         point: {
+  //           isPointSelected: false,
+  //           categoryName: '',
+  //           yValue: 0,
+  //         },
+  //       });
+  // };
 
-    if (barChartOptions.xAxis.categories.includes(e.target.innerHTML)) {
-      const index = barChartOptions.xAxis.categories.indexOf(
-        e.target.innerHTML
-      );
-      selectedPoint.push({
-        selected: true,
-        category: barChartOptions.xAxis.categories[index],
-        yValue: barChartOptions.series[0].data[index],
-      });
-    } else {
-      // ? CAN I DO THIS WITHOUT USING REF A LOT ELSEWHERE?
-      selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
-    }
+  // const chartDragHandler = (e) => {
+  //   // ? CAN I DO THIS WITHOUT USING REF A LOT ELSEWHERE?
+  //   const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
 
-    selectedPoint.length > 0
-      ? setViewState({
-          point: {
-            isPointSelected: selectedPoint[0].selected,
-            categoryName: selectedPoint[0].category,
-            yValue: selectedPoint[0].y,
-          },
-        })
-      : setViewState({
-          point: {
-            isPointSelected: false,
-            categoryName: '',
-            yValue: 0,
-          },
-        });
-  };
+  //   if (selectedPoint.length !== 0) {
+  //     setViewState({
+  //       point: {
+  //         isPointSelected: selectedPoint[0].options.selected,
+  //         categoryName: selectedPoint[0].category,
+  //         yValue: selectedPoint[0].y,
+  //       },
+  //     });
+  //   }
+  // };
 
-  const chartDragHandler = (e) => {
-    // ? CAN I DO THIS WITHOUT USING REF A LOT ELSEWHERE?
-    const selectedPoint = this.barChartRef.current.chart.getSelectedPoints();
-
-    if (selectedPoint.length !== 0) {
-      setViewState({
-        point: {
-          isPointSelected: selectedPoint[0].options.selected,
-          categoryName: selectedPoint[0].category,
-          yValue: selectedPoint[0].y,
-        },
-      });
-    }
-  };
-
-  const setIsPointSelected = (isSelected) => {
-    setViewState({
-      ...viewState,
-      point: { ...viewState.point, isPointSelected: isSelected },
+  const chartNameChange = (e) => {
+    // const { barChartDispatch } = this.context;
+    barChartDispatch({
+      type: BAR_CHART_ACTIONS.CHANGE_CHART_TITLE,
+      text: e.target.value,
     });
   };
 
-  const chartNameChange = (e) => {
-    // const { dispatch } = this.context;
-    dispatch({ type: 'CHANGE_CHART_TITLE', text: e.target.value });
-  };
-
   const yAxisTitleChange = (e) => {
-    // const { dispatch } = this.context;
-    dispatch({ type: 'CHANGE_Y_TITLE', newYTitle: e.target.value });
+    // const { barChartDispatch } = this.context;
+    barChartDispatch({
+      type: BAR_CHART_ACTIONS.CHANGE_Y_TITLE,
+      newYTitle: e.target.value,
+    });
   };
 
   const yAxisRangeChange = (e) => {
-    // const { dispatch } = this.context;
+    // const { barChartDispatch } = this.context;
 
     switch (e.target.id) {
       case 'chartYMin':
-        dispatch({
-          type: 'CHANGE_Y_RANGE_MIN',
-          newMin: Number(e.target.value),
+        barChartDispatch({
+          type: BAR_CHART_ACTIONS.CHANGE_Y_RANGE_MIN,
+          newMin: e.target.value,
+        });
+        barChartDispatch({
+          type: BAR_CHART_ACTIONS.CHANGE_DRAG_MIN,
+          newDragMinY: e.target.value,
         });
         break;
       case 'chartYMax':
-        dispatch({
-          type: 'CHANGE_Y_RANGE_MAX',
-          newMax: Number(e.target.value),
+        barChartDispatch({
+          type: BAR_CHART_ACTIONS.CHANGE_Y_RANGE_MAX,
+          newMax: e.target.value,
+        });
+        barChartDispatch({
+          type: BAR_CHART_ACTIONS.CHANGE_DRAG_MAX,
+          newDragMaxY: e.target.value,
         });
         break;
       default:
@@ -170,18 +169,24 @@ const BarChartView = () => {
   };
 
   const changeYTickHandler = (e) => {
-    // const { dispatch } = this.context;
+    // const { barChartDispatch } = this.context;
     if (!isNaN(Number(e.target.value)) && Number(e.target.value) > 0) {
-      dispatch({
-        type: 'CHANGE_Y_TICK_INTERVAL',
-        newTick: Number(e.target.value),
+      barChartDispatch({
+        type: BAR_CHART_ACTIONS.CHANGE_Y_TICK_INTERVAL,
+        newTick: e.target.value,
+      });
+    } else {
+      barChartDispatch({
+        type: BAR_CHART_ACTIONS.CHANGE_Y_TICK_INTERVAL,
+        newTick: '',
       });
     }
   };
 
   const addButtonClickHandle = () => {
-    dispatch({
-      type: 'ADD_POINT',
+    barChartDispatch({
+      type: BAR_CHART_ACTIONS.ADD_POINT,
+      // TODO - Remove payload and move it to BarChartContext
       newPoint: {
         selected: false,
         y: 1,
@@ -191,47 +196,23 @@ const BarChartView = () => {
   };
 
   const chartPointChange = (e) => {
-    // const { chartOptions, dispatch } = this.context;
-
+    // const { chartOptions, barChartDispatch } = this.context;
     switch (e.target.id) {
       case 'pointCategoryInput':
         e.persist();
-        const oldCategory = viewState.point.categoryName;
         const newCategory = e.target.value === '' ? '' : e.target.value;
 
-        setViewState({
-          ...viewState,
-          point: { ...viewState.point, categoryName: newCategory },
+        userStateDispatch({
+          type: USER_ACTIONS.CHANGE_SELECTION_CATEGORY,
+          newCategoryName: e.target.value,
         });
 
-        dispatch({
-          type: 'CHANGE_CATEGORY',
-          old: oldCategory,
-          new: newCategory,
+        barChartDispatch({
+          type: BAR_CHART_ACTIONS.CHANGE_CATEGORY,
+          indexToChange: userState.selection.point.index,
+          newCategoryName: newCategory,
         });
         break;
-
-      case 'pointYValueInput':
-        const oldValue = viewState.point.yValue;
-        const newValue = Number(e.target.value);
-
-        setViewState(
-          {
-            ...viewState,
-            point: { ...viewState.point, yValue: parseFloat(newValue) },
-          },
-          () => {
-            dispatch({ type: 'CHANGE_Y_VALUE', old: oldValue, new: newValue });
-
-            // this.barChartRef.current.chart.series[0].setData(
-            //   chartOptions.series[0].data,
-            //   true
-            // );
-          }
-        );
-
-        break;
-
       default:
         break;
     }
@@ -277,7 +258,7 @@ const BarChartView = () => {
                     label='Y-Axis Min'
                     placeholder='Enter Y-Axis Min'
                     variant='outlined'
-                    value={barChartOptions.yAxis.min || ''}
+                    value={barChartOptions.yAxis.min}
                     onChange={yAxisRangeChange}
                   />
                   <TextField
@@ -286,7 +267,7 @@ const BarChartView = () => {
                     label='Y-Axis Max'
                     placeholder='Enter Y-Axis Max'
                     variant='outlined'
-                    value={barChartOptions.yAxis.max || ''}
+                    value={barChartOptions.yAxis.max}
                     onChange={yAxisRangeChange}
                   />
                 </div>
@@ -296,12 +277,12 @@ const BarChartView = () => {
                   label='Y-Axis Interval'
                   placeholder='Enter Y-Axis Interval'
                   variant='outlined'
-                  value={barChartOptions.yAxis.tickInterval || ''}
+                  value={barChartOptions.yAxis.tickInterval}
                   onChange={changeYTickHandler}
                 />
                 <AddButton clickHandler={addButtonClickHandle} />
               </div>
-              {viewState.point.isPointSelected ? (
+              {userState.selection.point.isPointSelected ? (
                 <>
                   <Divider variant='middle' />
                   <div className={classes.section}>
@@ -310,14 +291,11 @@ const BarChartView = () => {
                       type='text'
                       label='Category'
                       placeholder='Enter Category Name'
-                      value={viewState.point.categoryName || ''}
+                      value={userState.selection.point.categoryName}
                       variant='outlined'
                       onChange={chartPointChange}
                     />
-                    <DeleteButton
-                      selected={viewState.point}
-                      selectedHandler={setIsPointSelected}
-                    />
+                    <DeleteButton selected={userState.selection.point} />
                   </div>
                 </>
               ) : (
