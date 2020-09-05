@@ -2,24 +2,65 @@ import React, { createContext, useReducer } from 'react';
 
 export const BarChartContext = createContext();
 
+export const BAR_CHART_ACTIONS = {
+  ADD_POINT: 'ADD_POINT',
+  CHANGE_CATEGORY: 'CHANGE_CATEGORY',
+  CHANGE_CHART_TITLE: 'CHANGE_CHART_TITLE',
+  CHANGE_DRAG_MIN: 'CHANGE_DRAG_MIN',
+  CHANGE_DRAG_MAX: 'CHANGE_DRAG_MAX',
+  CHANGE_Y_RANGE_MIN: 'CHANGE_Y_RANGE_MIN',
+  CHANGE_Y_RANGE_MAX: 'CHANGE_Y_RANGE_MAX',
+  CHANGE_Y_TICK_INTERVAL: 'CHANGE_Y_TICK_INTERVAL',
+  CHANGE_Y_TITLE: 'CHANGE_Y_TITLE',
+  CHANGE_Y_VALUE: 'CHANGE_Y_VALUE',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
 const BarChartReducer = (state, action) => {
   let points = [...state.series.data];
   let categories = [...state.xAxis.categories];
 
   switch (action.type) {
-    case 'CHANGE_CHART_TITLE':
+    case BAR_CHART_ACTIONS.CHANGE_CHART_TITLE:
       // return action.text !== ""
       //   ? { ...state, title: { text: action.text } }
       //   : { ...state, title: { text: "My Chart" } };
       return { ...state, title: { text: action.text } };
-    case 'CHANGE_CATEGORY':
-      const catIndex = state.xAxis.categories.indexOf(action.old);
-      categories[catIndex] = action.new;
+    case BAR_CHART_ACTIONS.CHANGE_CATEGORY:
+      categories[action.indexToChange] = action.newCategoryName;
       return {
         ...state,
         xAxis: { categories: categories },
       };
-    case 'CHANGE_Y_TITLE':
+    case BAR_CHART_ACTIONS.CHANGE_DRAG_MIN:
+      return {
+        ...state,
+        plotOptions: {
+          ...state.plotOptions,
+          column: {
+            ...state.plotOptions.column,
+            dragDrop: {
+              ...state.plotOptions.column.dragDrop,
+              dragMinY: action.newDragMinY,
+            },
+          },
+        },
+      };
+    case BAR_CHART_ACTIONS.CHANGE_DRAG_MAX:
+      return {
+        ...state,
+        plotOptions: {
+          ...state.plotOptions,
+          column: {
+            ...state.plotOptions.column,
+            dragDrop: {
+              ...state.plotOptions.column.dragDrop,
+              dragMaxY: action.newDragMaxY,
+            },
+          },
+        },
+      };
+    case BAR_CHART_ACTIONS.CHANGE_Y_TITLE:
       return {
         ...state,
         yAxis: {
@@ -29,41 +70,23 @@ const BarChartReducer = (state, action) => {
           },
         },
       };
-    case 'CHANGE_Y_RANGE_MIN':
+    case BAR_CHART_ACTIONS.CHANGE_Y_RANGE_MIN:
       return {
         ...state,
         yAxis: {
           ...state.yAxis,
           min: action.newMin,
         },
-        chart: [
-          {
-            ...state.chart,
-            dragDrop: {
-              ...state.chart.dragDrop,
-              dragMinY: action.newMin,
-            },
-          },
-        ],
       };
-    case 'CHANGE_Y_RANGE_MAX':
+    case BAR_CHART_ACTIONS.CHANGE_Y_RANGE_MAX:
       return {
         ...state,
         yAxis: {
           ...state.yAxis,
           max: action.newMax,
         },
-        chart: [
-          {
-            ...state.chart,
-            dragDrop: {
-              ...state.chart.dragDrop,
-              dragMaxY: action.newMax,
-            },
-          },
-        ],
       };
-    case 'CHANGE_Y_TICK_INTERVAL':
+    case BAR_CHART_ACTIONS.CHANGE_Y_TICK_INTERVAL:
       return {
         ...state,
         yAxis: {
@@ -71,7 +94,7 @@ const BarChartReducer = (state, action) => {
           tickInterval: action.newTick,
         },
       };
-    case 'CHANGE_Y_VALUE':
+    case BAR_CHART_ACTIONS.CHANGE_Y_VALUE:
       const yIndex = state.series.data.findIndex((el) => el.y === action.old);
       points[yIndex].y = parseFloat(action.new);
       return {
@@ -79,12 +102,9 @@ const BarChartReducer = (state, action) => {
         series: [{ ...state.series, data: points }],
       };
 
-    case 'DELETE_POINT':
-      const indexOfPoint = state.series.data.findIndex(
-        (el) => el.y === action.selected.yValue
-      );
-      points.splice(indexOfPoint, 1);
-      categories.splice(indexOfPoint, 1);
+    case BAR_CHART_ACTIONS.DELETE_POINT:
+      points.splice(action.selected.index, 1);
+      categories.splice(action.selected.index, 1);
 
       return {
         ...state,
@@ -95,7 +115,7 @@ const BarChartReducer = (state, action) => {
         xAxis: { ...state.xAxis, categories: categories },
       };
 
-    case 'ADD_POINT':
+    case BAR_CHART_ACTIONS.ADD_POINT:
       points.push(action.newPoint);
       categories.push(action.newCategory);
 
@@ -114,7 +134,7 @@ const BarChartReducer = (state, action) => {
 };
 
 export const BarChartProvider = (props) => {
-  const [barChartOptions, dispatch] = useReducer(BarChartReducer, {
+  const [barChartOptions, barChartDispatch] = useReducer(BarChartReducer, {
     chart: {
       type: 'column',
     },
@@ -147,12 +167,13 @@ export const BarChartProvider = (props) => {
             // },
             drop: (e) => {
               console.log('drop', e);
+              console.log(props);
             },
             select: (e) => {
-              console.log('select', e);
+              console.log('select', e.target.index);
             },
             unselect: (e) => {
-              console.log('unselect', e);
+              // console.log('unselect', e);
             },
           },
         },
@@ -166,9 +187,9 @@ export const BarChartProvider = (props) => {
       title: {
         text: 'Values',
       },
-      min: 0,
-      max: 10,
-      tickInterval: 1,
+      min: '0',
+      max: '10',
+      tickInterval: '1',
     },
     series: {
       name: 'BarChartData',
@@ -183,7 +204,7 @@ export const BarChartProvider = (props) => {
 
   return (
     <BarChartContext.Provider
-      value={{ barChartOptions: barChartOptions, dispatch }}>
+      value={{ barChartOptions: barChartOptions, barChartDispatch }}>
       {props.children}
     </BarChartContext.Provider>
   );
