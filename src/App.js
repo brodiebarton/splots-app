@@ -6,6 +6,7 @@ import CssBaseLine from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
 import { BarChartProvider } from './Contexts/BarChartContext';
+import { HistogramProvider } from './Contexts/HistogramContext';
 import { UserStateProvider } from './Contexts/UserContext';
 
 function App() {
@@ -27,7 +28,9 @@ function App() {
         <CssBaseLine />
         <UserStateProvider>
           <BarChartProvider>
-            <Home />
+            <HistogramProvider>
+              <Home />
+            </HistogramProvider>
           </BarChartProvider>
         </UserStateProvider>
       </ThemeProvider>
