@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 // const BarChart = React.forwardRef((props, ref) => {
 const BarChart = ({ chartOptions }) => {
-  const { userState, userStateDispatch } = useContext(UserContext);
+  const { userStateDispatch } = useContext(UserContext);
   const classes = useStyles();
   const chartRef = useRef();
 
@@ -64,13 +64,15 @@ const BarChart = ({ chartOptions }) => {
 
   useEffect(() => {
     // onMount
+    chartRef.current.update(chartOptions, true, true, true);
+
     chartRef.current.container.addEventListener(
       'click',
       chartPointSelectionHandle
     );
 
     return () => {
-      // onUnmount
+      // unMount
       chartRef.current.container.removeEventListener(
         'click',
         chartPointSelectionHandle

@@ -1,22 +1,19 @@
-import React, { useState, useContext, useLayoutEffect, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
+
 import { makeStyles } from '@material-ui/core/styles';
 // import { BarChartContext } from '../Contexts/BarChartContext';
 import BarChart from '../Components/BarChart';
 import DeleteButton from '../Components/DeleteButton';
 import AddButton from '../Components/AddButton';
 import {
-  BarChartProvider,
   BarChartContext,
   BAR_CHART_ACTIONS,
 } from '../Contexts/BarChartContext';
 import { UserContext, USER_ACTIONS } from '../Contexts/UserContext';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 
 // ? Extract styles to external file?
 const useStyles = makeStyles((theme) => ({

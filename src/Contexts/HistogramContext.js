@@ -22,8 +22,8 @@ export const HISTOGRAM_ACTIONS = {
 };
 
 const HistogramReducer = (state, action) => {
-  let points = [...state.series.data];
-  let categories = [...state.series.data];
+  let points = [...state.series[1].data];
+  let categories = [...state.series[1].data];
 
   switch (action.type) {
     case HISTOGRAM_ACTIONS.CHANGE_CHART_TITLE:
@@ -97,7 +97,9 @@ const HistogramReducer = (state, action) => {
         },
       };
     case HISTOGRAM_ACTIONS.CHANGE_X_VALUE:
-      const xIndex = state.series.data.findIndex((el) => el.x === action.old);
+      const xIndex = state.series[1].data.findIndex(
+        (el) => el.x === action.old
+      );
       points[xIndex].x = parseFloat(action.new);
       return {
         ...state,
@@ -138,7 +140,9 @@ const HistogramReducer = (state, action) => {
         },
       };
     case HISTOGRAM_ACTIONS.CHANGE_Y_VALUE:
-      const yIndex = state.series.data.findIndex((el) => el.y === action.old);
+      const yIndex = state.series[1].data.findIndex(
+        (el) => el.y === action.old
+      );
       points[yIndex].y = parseFloat(action.new);
       return {
         ...state,
@@ -161,15 +165,11 @@ const HistogramReducer = (state, action) => {
     case HISTOGRAM_ACTIONS.ADD_POINT:
       points.push(action.newPoint);
       // categories.push(action.newCategory);
-
-      return {
-        ...state,
-        series: {
-          ...state.series,
-          data: points,
-        },
-        // xAxis: { ...state.xAxis, categories: categories },
-      };
+      // ! NOT WORKING OR RE-RENDERING
+      const newState = { ...state, series: [...state.series] };
+      state.series[1].data = points;
+      console.log(newState);
+      return state;
     default:
       console.log('default');
       return state;
@@ -200,6 +200,7 @@ export const HistogramProvider = (props) => {
       min: 0,
       max: 10,
       tickInterval: 1,
+      alignTicks: false,
     },
 
     yAxis: {
@@ -211,8 +212,14 @@ export const HistogramProvider = (props) => {
 
     plotOptions: {
       histogram: {
+        binWidth: 1,
         allowPointSelect: true,
+        // pointPadding: 0,
+        // borderWidth: 0,
+        // groupPadding: 0,
+        // shadow: false,
         dragDrop: {
+          // draggableX: true,
           draggableY: true,
           // dragPrecisionY: 0.5,
           dragMinY: 0,
@@ -237,15 +244,21 @@ export const HistogramProvider = (props) => {
       },
     },
 
-    series: {
-      name: 'Histogram',
-      type: 'histogram',
-      data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      // xAxis: 1,
-      // yAxis: 1,
-      // baseSeries: 's1',
-      // zIndex: -1,
-    },
+    series: [
+      {
+        name: 'Histogram',
+        type: 'histogram',
+        // xAxis: 1,
+        // yAxis: 1,
+        baseSeries: 1,
+        // zIndex: -1,
+      },
+      {
+        // type: 'histogram',
+        visible: false,
+        data: [],
+      },
+    ],
   });
 
   return (
