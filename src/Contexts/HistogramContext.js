@@ -164,12 +164,9 @@ const HistogramReducer = (state, action) => {
 
     case HISTOGRAM_ACTIONS.ADD_POINT:
       points.push(action.newPoint);
-      // categories.push(action.newCategory);
-      // ! NOT WORKING OR RE-RENDERING
       const newState = { ...state, series: [...state.series] };
-      state.series[1].data = points;
-      console.log(newState);
-      return state;
+      newState.series[1].data = points;
+      return newState;
     default:
       console.log('default');
       return state;

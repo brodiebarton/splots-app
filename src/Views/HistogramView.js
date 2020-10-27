@@ -171,9 +171,8 @@ const HistogramView = () => {
   const addButtonClickHandle = () => {
     histogramDispatch({
       type: HISTOGRAM_ACTIONS.ADD_POINT,
-      // TODO - Remove payload and move it to BarChartContext
+      // TODO - Need to add new point not in the same spot every time
       newPoint: histogramOptions.xAxis.tickInterval / 2,
-      newCategory: 'New Category',
     });
   };
 
