@@ -1,5 +1,9 @@
+# Charts Application (Demo)
+### Work in progress... not ready for production use.
 
-# Charts Application
+This application is being made as a virtual student assessment tool for teachers to test their students on modeling data to various chart types.
+
+## Live link: [Chart App](https://chart-app.brodiebarton.com/)
 
 ![Demo gif](src/img/screenshots/ChartsApp_BarChart.jpg)
 
