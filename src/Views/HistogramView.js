@@ -1,14 +1,12 @@
-import React, { useState, useContext, useLayoutEffect, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteButton from '../Components/DeleteButton';
 import AddButton from '../Components/AddButton';
 import {
-  HistogramProvider,
   HistogramContext,
   HISTOGRAM_ACTIONS,
 } from '../Contexts/HistogramContext';
@@ -173,12 +171,8 @@ const HistogramView = () => {
   const addButtonClickHandle = () => {
     histogramDispatch({
       type: HISTOGRAM_ACTIONS.ADD_POINT,
-      // TODO - Remove payload and move it to BarChartContext
-      newPoint: {
-        selected: false,
-        y: 1,
-      },
-      newCategory: 'New Category',
+      // TODO - Need to add new point not in the same spot every time
+      newPoint: histogramOptions.xAxis.tickInterval / 2,
     });
   };
 

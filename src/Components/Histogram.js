@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Paper } from '@material-ui/core';
@@ -33,6 +33,14 @@ const Histogram = ({ chartOptions }) => {
   const { userState, userStateDispatch } = useContext(UserContext);
   const chartRef = useRef();
   const classes = useStyles();
+
+  useEffect(() => {
+    // onMount
+    chartRef.current.update(chartOptions, true, true, true);
+    return () => {
+      // unMount
+    };
+  }, []);
 
   return (
     // <div id='myHistogram' className={classes.histogram}>
